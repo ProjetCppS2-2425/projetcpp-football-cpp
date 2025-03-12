@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>997</width>
+    <height>635</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Gestion des Matchs</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+    QMainWindow, QWidget {
+        background-color: #1E1E1E;
+        color: white;
+        font-size: 12px;
+    }
+    QGroupBox {
+        background-color: #2D2D2D;
+        border: 1px solid #E45638;
+        border-radius: 10px;
+        margin-top: 10px;
+        padding: 15px;
+    }
+    QGroupBox::title {
+        color: #E45638;
+        subcontrol-origin: margin;
+        left: 10px;
+        padding: 0 5px;
+    }
+    QLineEdit, QDateEdit, QComboBox {
+        background-color: #2D2D2D;
+        border: 1px solid #E45638;
+        border-radius: 4px;
+        padding: 5px;
+        color: white;
+    }
+    QPushButton {
+        background-color: #E45638;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+    }
+    QPushButton:hover {
+        background-color: #D14829;
+    }
+    QTableView {
+        background-color: #2D2D2D;
+        border: 1px solid #E45638;
+        border-radius: 4px;
+    }
+    QTableView::item:selected {
+        background-color: #E45638;
+    }
+    QHeaderView::section {
+        background-color: #1E1E1E;
+        color: #E45638;
+        padding: 5px;
+        border: none;
+    }
+   </string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>Informations du Match</string>
+      </property>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Équipe 1:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_equipe1"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Équipe 2:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineEdit_equipe2"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Date:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QDateEdit" name="dateEdit_date"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Lieu:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="lineEdit_lieu"/>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Type:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QComboBox" name="comboBox_type">
+         <item>
+          <property name="text">
+           <string>Amical</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Championnat</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Coupe</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>État:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QComboBox" name="comboBox_etat">
+         <item>
+          <property name="text">
+           <string>Programmé</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>En cours</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Terminé</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Annulé</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="pushButton_ajouter">
+        <property name="text">
+         <string>Ajouter</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_modifier">
+        <property name="text">
+         <string>Modifier</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_supprimer">
+        <property name="text">
+         <string>Supprimer</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>ID:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="lineEdit_id"/>
+    </item>
+    <item>
+     <widget class="QTableView" name="tableView"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>997</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
