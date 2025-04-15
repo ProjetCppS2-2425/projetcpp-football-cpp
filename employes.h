@@ -20,6 +20,7 @@ public:
     static QString generateUniquePassword(); // Function to generate a unique password
 
     // Getters
+    QString getIdEmp() const;
     QString getNom() const;
     QString getPrenom() const;
     QString getDateEmbauche() const;
@@ -34,6 +35,7 @@ public:
     int getIdM() const;
 
 private:
+    QString idEmp;
     QString nom;
     QString prenom;
     QString dateEmbauche;

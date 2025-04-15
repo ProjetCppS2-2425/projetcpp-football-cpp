@@ -3,8 +3,13 @@
 # Project created by QtCreator 2018-10-26T21:45:23
 #
 #-------------------------------------------------
-QT +=sql
 QT       += core gui sql
+QT += charts
+QT += widgets
+QT += widgets sql printsupport
+QT += network
+QT       += core gui sql printsupport multimedia charts axcontainer
+QT += core gui serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,17 +30,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    dialog__qr.cpp \
     employes.cpp \
         main.cpp \
         mainwindow.cpp \
-    connection.cpp
+    connection.cpp \
+    qr_code.cpp \
+    smtp.cpp
 
 HEADERS += \
+    dialog__qr.h \
     employes.h \
         mainwindow.h \
-    connection.h
+    connection.h \
+    qr_code.hpp \
+    smtp.h
 
 FORMS += \
+        dialog__qr.ui \
         mainwindow.ui
 
 # Default rules for deployment.

@@ -11,8 +11,8 @@ bool Connection::createconnect()
 {
     bool test = false;
     QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-    db.setDatabaseName("ProBracket");  // ODBC Data Source Name
-    db.setUserName("ProBracket");      // Database username
+    db.setDatabaseName("probracket");  // ODBC Data Source Name
+    db.setUserName("probracket");      // Database username
     db.setPassword("foot");            // Database password
 
     if (db.open()) {

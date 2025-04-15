@@ -1,12 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "Employes.h"
+#include "employes.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , employe("DefaultNom", "DefaultPrenom", "2025-04-11", "3000", "PosteDefaut", "email@example.com", "Homme", "password123", 1, 2)  // Constructeur avec des valeurs par défaut
 {
     ui->setupUi(this);
+
 
     ui->groupBox_3->setVisible(false);
     ui->tabWidget->setVisible(false);
@@ -20,7 +22,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->Billets_3, &QPushButton::clicked, this, [=]() { changePage(5); });
     connect(ui->Sponsors_3, &QPushButton::clicked, this, [=]() { changePage(6); });
 
-    connect(ui->Valider, &QPushButton::clicked, this, &MainWindow::on_Valider_clicked);
     ui->tableWidget->setSortingEnabled(true);
 }
 
@@ -44,6 +45,9 @@ void MainWindow::changePage(int index)
 
 void MainWindow::on_Valider_clicked()
 {
+    // Disable the button to prevent multiple clicks
+    ui->Valider->setEnabled(false);
+
     QString nom = ui->nom->text();
     QString prenom = ui->prenom->text();
     QString dateEmbauche = ui->date_emb->date().toString("yyyy-MM-dd");
@@ -54,12 +58,22 @@ void MainWindow::on_Valider_clicked()
 
     QString password = Employes::generateUniquePassword(); // Fix constructor issue
 
-    // Assuming you have these values ready, for example:
-    int idEntraineur = 1; // Replace with actual value
-    int idM = 2;          // Replace with actual value
+    int idEntraineur = ui->id_entr->text().toInt();
+    int idM = ui->id_m->text().toInt();         // Replace with actual value
+
+    qDebug() << "Nom: " << nom;
+    qDebug() << "Prenom: " << prenom;
+    qDebug() << "Date: " << dateEmbauche;
+    qDebug() << "Salaire: " << salaire;
+    qDebug() << "Poste: " << poste;
+    qDebug() << "Email: " << email;
+    qDebug() << "Sexe: " << sexe;
+    qDebug() << "Password: " << password;
+    qDebug() << "ID Entraineur: " << idEntraineur;
+    qDebug() << "ID M: " << idM;
 
     if (!nom.isEmpty() && !prenom.isEmpty() && !dateEmbauche.isEmpty() && !salaire.isEmpty() && !email.isEmpty()) {
-        Employes emp(nom, prenom, dateEmbauche, salaire, poste, email, sexe, password, idEntraineur, idM); // Now using 10 arguments
+        Employes emp(nom, prenom, dateEmbauche, salaire, poste, email, sexe, password, idEntraineur, idM);
 
         if (emp.addToDatabase()) { // Fixed function name
             int row = ui->tableWidget->rowCount();
@@ -85,9 +99,44 @@ void MainWindow::on_Valider_clicked()
     } else {
         qDebug() << "Form fields are incomplete. Row not added.";
     }
+
+    // Re-enable the button after processing
+    ui->Valider->setEnabled(true);
 }
 
 
+void MainWindow::sendMail()
+{
+    // Utilisation de l'email de l'employé nouvellement ajouté
+    QString recipientEmail = employe.getEmail();
+    if (recipientEmail.isEmpty() || !recipientEmail.contains("@")) {
+        QMessageBox::critical(this, "Invalid Email", "The recipient email is invalid.");
+        return;
+    }
+
+    Smtp* smtp = new Smtp("dhiafoudhaili10@gmail.com", "riep dnvk eirc leru", "smtp.gmail.com", 465);
+    connect(smtp, &Smtp::status, this, &MainWindow::mailSent);
+
+    smtp->sendMail(
+        "dhiafoudhaili10@gmail.com",
+        recipientEmail,
+        "ProBracket",
+        "Bienvenue chez ProBracket ! Nous sommes ravis de vous compter parmi nous et avons hâte de vous servir."
+        "Votre mot de passe : " + employe.getPassword()
+
+    );
+}
+
+void MainWindow::mailSent(QString status)
+{
+    if (status == "Message sent")
+        QMessageBox::information(nullptr, "mail envoyé", "Le mail d'accueil a été envoyé à " + employe.getEmail() + " !!");
+}
+
+void MainWindow::on_mailing_clicked()
+{
+    sendMail();
+}
 
 void MainWindow::modifyRow(int row)
 {
