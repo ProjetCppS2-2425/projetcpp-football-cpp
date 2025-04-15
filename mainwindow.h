@@ -2,8 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSqlTableModel>
+#include <QDate>
 #include "billets.h"
-
 namespace Ui {
 class MainWindow;
 }
@@ -17,16 +18,26 @@ public:
     ~MainWindow();
 
 private slots:
+
+    void on_bt_tri_clicked();
+    void on_pdf_clicked();
+    void on_table_Billets_clicked(const QModelIndex &index);
+
+    void on_chercher_textChanged(const QString &arg1);
+
     void on_ajouter_clicked();
-    void on_supprimer_clicked();
+
     void on_modifier_clicked();
-    void on_afficher_clicked();
-    bool idExists(int id_m);          // Déclaration de idExists
-    void remplirComboBoxMatchs(); // Ajoutez cette ligne
-    void ajouterBillet();
+
+    void on_supprimer_clicked();
+
+
 private:
     Ui::MainWindow *ui;
-    Billets *billets;
+    QSqlTableModel *model;
+    void clearInputs();
+    void stat();
+    billets b;
 };
 
 #endif // MAINWINDOW_H

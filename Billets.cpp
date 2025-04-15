@@ -1,132 +1,142 @@
 #include "billets.h"
+
+#include <utility>
 #include <QSqlQuery>
+#include <QVariant>
 #include <QSqlError>
 #include <QDebug>
-#include <QMessageBox>
-
-// Default constructor
-Billets::Billets() {
-    // Initialize member variables if needed
-}
-
-// Parameterized constructor
-Billets::Billets(int CIN, int nombreDeBillets, QDate dateEmission, int siege, QString type, double prix, int idM)
-    : CIN(CIN), nombreDeBillets(nombreDeBillets), dateEmission(dateEmission), siege(siege), type(type), prix(prix), idM(idM) {
-    // Initialize member variables with provided values
-}
-
-// Getters
-int Billets::getCIN() { return CIN; }
-int Billets::getNombreDeBillets() { return nombreDeBillets; }
-QDate Billets::getDateEmission() { return dateEmission; }
-int Billets::getSiege() { return siege; }
-QString Billets::getType() { return type; }
-double Billets::getPrix() { return prix; }
-int Billets::getIdM() { return idM; }
-
-// Setters
-void Billets::setCIN(int cin) { this->CIN = cin; }
-void Billets::setNombreDeBillets(int nombre) { this->nombreDeBillets = nombre; }
-void Billets::setDateEmission(QDate date) { this->dateEmission = date; }
-void Billets::setSiege(int siege) { this->siege = siege; }
-void Billets::setType(QString type) { this->type = type; }
-void Billets::setPrix(double prix) { this->prix = prix; }
-void Billets::setIdM(int id) { this->idM = id; }
-
-// Method to add a billet to the database
-bool Billets::ajouterBillet() {
-    QSqlQuery query;
-
-    // Check if the database is open
-    QSqlDatabase db = QSqlDatabase::database();
-    if (!db.isOpen()) {
-        qDebug() << "Database is not open!";
-        return false;
-    } else {
-        qDebug() << "Database is open and connected.";
-    }
-
-    // Prepare the SQL query
-    query.prepare("INSERT INTO MARAM.BILLETS (CIN, NOMBRE_DE_BILLETS, DATE_EMISSION, SIEGE, TYPE, PRIX, ID_M) "
-                  "VALUES (:CIN, :NOMBRE_DE_BILLETS, TO_DATE(:DATE_EMISSION, 'YYYY-MM-DD'), :SIEGE, :TYPE, :PRIX, :ID_M)");
-
-    // Bind values to the query
-    query.bindValue(":CIN", CIN);
-    query.bindValue(":NOMBRE_DE_BILLETS", nombreDeBillets);
-    query.bindValue(":DATE_EMISSION", dateEmission.toString("yyyy-MM-dd")); // Ensure correct date format
-    query.bindValue(":SIEGE", siege);
-    query.bindValue(":TYPE", type);
-    query.bindValue(":PRIX", prix);
-    query.bindValue(":ID_M", idM);
-
-    // Debug: Print the query and bound values
-    qDebug() << "Executing query:" << query.lastQuery();
-    qDebug() << "Bound values:" << query.boundValues();
-
-    // Execute the query
-    if (query.exec()) {
-        qDebug() << "Billet added successfully!";
-        return true; // Success
-    } else {
-        QMessageBox::critical(nullptr, QObject::tr("Erreur"),
-                              QObject::tr("Erreur d'ajout du billet: %1").arg(query.lastError().text()), QMessageBox::Ok);
-        qDebug() << "Error adding billet:" << query.lastError().text();
-        return false; // Failure
-    }
-}
-// Method to delete a billet from the database
-bool Billets::supprimerBillet(int cin) {
-    QSqlQuery query;
-    query.prepare("DELETE FROM MARAM.BILLETS WHERE CIN = :CIN");
-    query.bindValue(":CIN", cin);
-
-    if (query.exec()) {
-        qDebug() << "Billet deleted successfully!";
-        return true;
-    } else {
-        qDebug() << "Error deleting billet:" << query.lastError().text();
-        return false;
-    }
-}
-
-// Method to modify a billet in the database
-bool Billets::modifierBillet() {
-    if (CIN <= 0) {
-        qDebug() << "Invalid CIN!";
-        return false;
-    }
-
-    QSqlQuery query;
-    query.prepare("UPDATE MARAM.BILLETS SET NOMBRE_DE_BILLETS = :NOMBRE_DE_BILLETS, DATE_EMISSION = TO_DATE(:DATE_EMISSION, 'YYYY-MM-DD'), "
-                  "SIEGE = :SIEGE, TYPE = :TYPE, PRIX = :PRIX, ID_M = :ID_M WHERE CIN = :CIN");
-
-    query.bindValue(":CIN", CIN);
-    query.bindValue(":NOMBRE_DE_BILLETS", nombreDeBillets);
-    query.bindValue(":DATE_EMISSION", dateEmission.toString("yyyy-MM-dd"));
-    query.bindValue(":SIEGE", siege);
-    query.bindValue(":TYPE", type);
-    query.bindValue(":PRIX", prix);
-    query.bindValue(":ID_M", idM);
-
-    if (query.exec()) {
-        qDebug() << "Billet updated successfully!";
-        return true;
-    } else {
-        qDebug() << "Error updating billet:" << query.lastError().text();
-        return false;
-    }
-}
-
-
-QSqlQueryModel* Billets::afficherBillets()
+#include <QDate>
+class billetsData : public QSharedData
 {
-    QSqlQueryModel *model = new QSqlQueryModel;
-    model->setQuery("SELECT * FROM MARAM.BILLETS");
+public:
+};
 
-    if (model->lastError().isValid()) {
-        qDebug() << "Error displaying billets:" << model->lastError().text();
+billets::billets() {} // Default constructor
+
+billets::~billets() {} // Destructor
+
+// Add a billet to the database
+bool billets::addBillet(int id, int id_match, int nombre, const QDate &date, QString siege, double prix, const QString &type)
+{
+
+    QSqlQuery query;
+    query.prepare("INSERT INTO BILLETS (id, id_match,nombre, date_billet, siege, prix, type) "
+                  "VALUES (:id, :id_match, :nombre, :date_billet, :siege, :prix, :type)");
+    query.bindValue(":id", id);
+    query.bindValue(":id_match", id_match);
+    query.bindValue(":nombre", nombre);
+    query.bindValue(":date_billet", date);
+    query.bindValue(":siege", siege);
+    query.bindValue(":prix", prix);
+    query.bindValue(":type", type);
+
+    if (!query.exec()) {
+        qDebug() << "Add Billet Error:" << query.lastError().text();
+        return false;
     }
+    return true;
+}
 
+// Update a billet in the database
+bool billets::modifyBillet(int id, int id_match, int nombre, const QDate &date, QString siege, double prix, const QString &type)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE BILLETS SET id_match = :id_match, nombre = :nombre, date_billet = :date_billet, "
+                  "siege = :siege,prix= :prix, type = :type WHERE id = :id");
+    query.bindValue(":id", id);
+    query.bindValue(":id_match", id_match);
+    query.bindValue(":nombre", nombre);
+    query.bindValue(":date_billet", date);
+    query.bindValue(":siege", siege);
+    query.bindValue(":prix", prix);
+    query.bindValue(":type", type);
+
+    if (!query.exec()) {
+        qDebug() << "Modify Billet Error:" << query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+// Delete a billet from the database
+bool billets::deleteBillet(int id)
+{
+    QSqlQuery query;
+    query.prepare("DELETE FROM BILLETS WHERE id = :id");
+    query.bindValue(":id", id);
+
+    if (!query.exec()) {
+        qDebug() << "Delete Billet Error:" << query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+// Display all billets
+QSqlQueryModel* billets::displayBillets()
+{
+    QSqlQueryModel* model = new QSqlQueryModel();
+    model->setQuery("SELECT * FROM billets");
     return model;
 }
 
+// Get all billets
+QSqlQueryModel* billets::afficher()
+{
+    QSqlQueryModel* model = new QSqlQueryModel();
+    QSqlQuery query;
+    query.prepare("SELECT * FROM billets");
+    if (!query.exec()) {
+        qDebug() << "Get All Billets Error:" << query.lastError().text();
+    }
+    model->setQuery(query);
+    return model;
+}
+
+int billets::countType(const QString& TYPE)
+{
+    int count = 0;
+
+    QSqlQuery query;
+    query.prepare("SELECT COUNT(TYPE) FROM BILLETS WHERE TYPE = :TYPE");
+    query.bindValue(":TYPE", TYPE);
+
+    if (query.exec() && query.next()) {
+        count = query.value(0).toInt();
+    }
+
+    return count;
+}
+
+
+QSqlQueryModel* billets::tri(QString column,QString choix)
+{
+QSqlQueryModel* model = new QSqlQueryModel();
+model->setQuery("SELECT * FROM BILLETS ORDER BY "+column +" "+choix);
+
+
+return model;
+}
+
+QSqlQueryModel* billets::chercher(QString column,QString text)
+{
+QSqlQueryModel* model = new QSqlQueryModel();
+model->setQuery("SELECT * FROM BILLETS WHERE "+column+" LIKE '%" + text + "%' ");
+
+
+return model;
+}
+
+bool billets::idExists(int id)
+{
+QSqlQuery query;
+query.prepare("SELECT COUNT(*) FROM BILLETS WHERE ID = :id");
+query.bindValue(":id", id);
+
+if (query.exec() && query.next()) {
+    int count = query.value(0).toInt();
+    return count > 0;
+}
+
+return false;
+}

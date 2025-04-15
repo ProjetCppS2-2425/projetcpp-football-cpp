@@ -3,47 +3,31 @@
 
 #include <QString>
 #include <QSqlQueryModel>
-#include <QDate>
+#include <QSharedData>
 
-class Billets
+class billets : public QSharedData
 {
-private:
-    int CIN;
-    int nombreDeBillets;
-    QDate dateEmission;
-    int siege;
-    QString type;
-    double prix;
-    int idM;
-
-
 public:
-    Billets();
-    Billets(int CIN, int nombreDeBillets, QDate dateEmission, int siege, QString type, double prix, int idM);
+    billets();
+    ~billets();
 
-    // Getters
-    int getCIN();
-    int getNombreDeBillets();
-    QDate getDateEmission();
-    int getSiege();
-    QString getType();
-    double getPrix();
-    int getIdM();
+    bool addBillet(int id, int id_match, int nombre, const QDate &date, QString siege, double prix, const QString &type);
 
-    // Setters
-    void setCIN(int CIN);
-    void setNombreDeBillets(int nombre);
-    void setDateEmission(QDate date);
-    void setSiege(int siege);
-    void setType(QString type);
-    void setPrix(double prix);
-    void setIdM(int id);
+    bool modifyBillet(int id, int id_match, int nombre, const QDate &date, QString siege, double prix, const QString &type);
 
-    // Database operations
-    bool ajouterBillet();
-    bool supprimerBillet(int CIN);
-    bool modifierBillet();
-    QSqlQueryModel* afficherBillets();
+    bool deleteBillet(int id);
+
+    QSqlQueryModel* displayBillets();
+
+    QSqlQueryModel* afficher();
+
+    int countType(const QString& TYPE);
+    QSqlQueryModel* tri(QString column,QString choix);
+    QSqlQueryModel* chercher(QString column,QString text);
+    bool idExists(int id);
+
+
+
 };
 
 #endif // BILLETS_H

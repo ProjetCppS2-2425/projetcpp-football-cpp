@@ -3193,9 +3193,9 @@ font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
      <widget class="QTabWidget" name="tabWidget_2">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>10</x>
         <y>0</y>
-        <width>761</width>
+        <width>751</width>
         <height>471</height>
        </rect>
       </property>
@@ -3241,10 +3241,10 @@ QTabBar::tab:hover {
        <attribute name="title">
         <string>Acceuil</string>
        </attribute>
-       <widget class="QComboBox" name="comboBox_3">
+       <widget class="QComboBox" name="choix_tri">
         <property name="geometry">
          <rect>
-          <x>670</x>
+          <x>500</x>
           <y>10</y>
           <width>71</width>
           <height>24</height>
@@ -3312,10 +3312,10 @@ QComboBox QAbstractItemView {
        <widget class="QScrollArea" name="scrollArea_2">
         <property name="geometry">
          <rect>
-          <x>260</x>
+          <x>320</x>
           <y>50</y>
-          <width>501</width>
-          <height>311</height>
+          <width>431</width>
+          <height>301</height>
          </rect>
         </property>
         <property name="widgetResizable">
@@ -3326,8 +3326,8 @@ QComboBox QAbstractItemView {
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>499</width>
-           <height>309</height>
+           <width>429</width>
+           <height>299</height>
           </rect>
          </property>
          <widget class="QTableView" name="table_Billets">
@@ -3335,21 +3335,21 @@ QComboBox QAbstractItemView {
            <rect>
             <x>10</x>
             <y>10</y>
-            <width>471</width>
+            <width>411</width>
             <height>281</height>
            </rect>
           </property>
           <property name="styleSheet">
-           <string notr="true">text color:rgb(255, 255, 255);
-color: rgb(255, 255, 255);</string>
+           <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
           </property>
          </widget>
         </widget>
        </widget>
-       <widget class="QPushButton" name="pushButton_7">
+       <widget class="QPushButton" name="pdf">
         <property name="geometry">
          <rect>
-          <x>390</x>
+          <x>400</x>
           <y>370</y>
           <width>251</width>
           <height>51</height>
@@ -3413,30 +3413,12 @@ QPushButton::hover {
          <string>Export PDF</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_17">
-        <property name="geometry">
-         <rect>
-          <x>270</x>
-          <y>10</y>
-          <width>121</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: transparent;
-color: rgb(255, 255, 255);
-font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
-        </property>
-        <property name="text">
-         <string>Recherche par :</string>
-        </property>
-       </widget>
        <widget class="QGroupBox" name="groupBox_2">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>0</x>
           <y>10</y>
-          <width>241</width>
+          <width>301</width>
           <height>411</height>
          </rect>
         </property>
@@ -3504,13 +3486,13 @@ QGroupBox:hover {
 }</string>
         </property>
         <property name="title">
-         <string>Ajout</string>
+         <string>Ajout billets</string>
         </property>
         <widget class="QLabel" name="label_21">
          <property name="geometry">
           <rect>
            <x>40</x>
-           <y>220</y>
+           <y>230</y>
            <width>49</width>
            <height>16</height>
           </rect>
@@ -3520,14 +3502,14 @@ QGroupBox:hover {
 font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
          </property>
          <property name="text">
-          <string>Prix</string>
+          <string>Prix:</string>
          </property>
         </widget>
         <widget class="QDateEdit" name="date">
          <property name="geometry">
           <rect>
-           <x>40</x>
-           <y>90</y>
+           <x>80</x>
+           <y>150</y>
            <width>121</width>
            <height>21</height>
           </rect>
@@ -3539,8 +3521,8 @@ font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
         <widget class="QLabel" name="label_22">
          <property name="geometry">
           <rect>
-           <x>40</x>
-           <y>70</y>
+           <x>80</x>
+           <y>130</y>
            <width>121</width>
            <height>16</height>
           </rect>
@@ -3550,14 +3532,14 @@ font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
 font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
          </property>
          <property name="text">
-          <string>Date </string>
+          <string>Date:</string>
          </property>
         </widget>
         <widget class="QLabel" name="label_23">
          <property name="geometry">
           <rect>
-           <x>40</x>
-           <y>20</y>
+           <x>80</x>
+           <y>80</y>
            <width>151</width>
            <height>16</height>
           </rect>
@@ -3567,15 +3549,15 @@ font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
 font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
          </property>
          <property name="text">
-          <string>Nombre de billets</string>
+          <string>Nombre de billets:</string>
          </property>
         </widget>
         <widget class="QPushButton" name="ajouter">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>310</y>
-           <width>101</width>
+           <x>20</x>
+           <y>290</y>
+           <width>111</width>
            <height>41</height>
           </rect>
          </property>
@@ -3640,9 +3622,9 @@ QPushButton::hover {
         <widget class="QLabel" name="label_24">
          <property name="geometry">
           <rect>
-           <x>40</x>
-           <y>120</y>
-           <width>49</width>
+           <x>80</x>
+           <y>180</y>
+           <width>71</width>
            <height>16</height>
           </rect>
          </property>
@@ -3651,15 +3633,15 @@ QPushButton::hover {
 font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
          </property>
          <property name="text">
-          <string>Siege</string>
+          <string>Siege:</string>
          </property>
         </widget>
         <widget class="QLineEdit" name="prix">
          <property name="geometry">
           <rect>
            <x>40</x>
-           <y>240</y>
-           <width>141</width>
+           <y>250</y>
+           <width>81</width>
            <height>21</height>
           </rect>
          </property>
@@ -3673,8 +3655,8 @@ font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
         <widget class="QLineEdit" name="nombre_de_billets">
          <property name="geometry">
           <rect>
-           <x>40</x>
-           <y>40</y>
+           <x>80</x>
+           <y>100</y>
            <width>141</width>
            <height>21</height>
           </rect>
@@ -3689,8 +3671,8 @@ font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
         <widget class="QLineEdit" name="siege">
          <property name="geometry">
           <rect>
-           <x>40</x>
-           <y>140</y>
+           <x>80</x>
+           <y>200</y>
            <width>141</width>
            <height>21</height>
           </rect>
@@ -3705,8 +3687,8 @@ font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
         <widget class="QLabel" name="label_27">
          <property name="geometry">
           <rect>
-           <x>40</x>
-           <y>170</y>
+           <x>160</x>
+           <y>230</y>
            <width>49</width>
            <height>16</height>
           </rect>
@@ -3716,15 +3698,15 @@ font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
 font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
          </property>
          <property name="text">
-          <string>Type</string>
+          <string>Type:</string>
          </property>
         </widget>
         <widget class="QComboBox" name="type">
          <property name="geometry">
           <rect>
-           <x>40</x>
-           <y>190</y>
-           <width>141</width>
+           <x>160</x>
+           <y>250</y>
+           <width>101</width>
            <height>24</height>
           </rect>
          </property>
@@ -3785,9 +3767,9 @@ QComboBox QAbstractItemView {
         <widget class="QPushButton" name="modifier">
          <property name="geometry">
           <rect>
-           <x>120</x>
-           <y>310</y>
-           <width>111</width>
+           <x>150</x>
+           <y>290</y>
+           <width>121</width>
            <height>41</height>
           </rect>
          </property>
@@ -3852,9 +3834,9 @@ QPushButton::hover {
         <widget class="QPushButton" name="supprimer">
          <property name="geometry">
           <rect>
-           <x>20</x>
-           <y>360</y>
-           <width>131</width>
+           <x>90</x>
+           <y>350</y>
+           <width>121</width>
            <height>41</height>
           </rect>
          </property>
@@ -3916,69 +3898,77 @@ QPushButton::hover {
           <string>Supprimer</string>
          </property>
         </widget>
-        <widget class="QTextEdit" name="lineEdit_CIN_Edit">
+        <widget class="QLabel" name="label_26">
          <property name="geometry">
           <rect>
            <x>160</x>
-           <y>360</y>
-           <width>61</width>
-           <height>41</height>
+           <y>30</y>
+           <width>111</width>
+           <height>16</height>
           </rect>
          </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: transparent;
+font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
+         </property>
+         <property name="text">
+          <string>id matches</string>
+         </property>
         </widget>
-        <widget class="QComboBox" name="matchs">
+        <widget class="QLineEdit" name="id_match">
          <property name="geometry">
           <rect>
-           <x>70</x>
-           <y>270</y>
-           <width>76</width>
-           <height>26</height>
+           <x>160</x>
+           <y>50</y>
+           <width>111</width>
+           <height>21</height>
           </rect>
          </property>
-         <item>
-          <property name="text">
-           <string>1</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>2</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>3</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>4</string>
-          </property>
-         </item>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_28">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>30</y>
+           <width>151</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: transparent;
+font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
+         </property>
+         <property name="text">
+          <string>id billets:</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="id_billet">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>50</y>
+           <width>111</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
         </widget>
        </widget>
-       <widget class="QLabel" name="label_25">
+       <widget class="QPushButton" name="bt_tri">
         <property name="geometry">
          <rect>
-          <x>590</x>
-          <y>10</y>
-          <width>71</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: transparent;
-color: rgb(255, 255, 255);
-font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
-        </property>
-        <property name="text">
-         <string>Trier par :</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_8">
-        <property name="geometry">
-         <rect>
-          <x>470</x>
+          <x>680</x>
           <y>10</y>
           <width>61</width>
           <height>21</height>
@@ -4028,13 +4018,13 @@ QPushButton::icon {
 </string>
         </property>
         <property name="text">
-         <string>search</string>
+         <string>TRI</string>
         </property>
        </widget>
-       <widget class="QComboBox" name="comboBox_4">
+       <widget class="QComboBox" name="asc">
         <property name="geometry">
          <rect>
-          <x>390</x>
+          <x>590</x>
           <y>10</y>
           <width>71</width>
           <height>24</height>
@@ -4085,75 +4075,50 @@ QComboBox QAbstractItemView {
         </property>
         <item>
          <property name="text">
-          <string>ID</string>
+          <string>ASC</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>DESC</string>
          </property>
         </item>
        </widget>
-       <widget class="QPushButton" name="afficher">
+       <widget class="QLineEdit" name="chercher">
         <property name="geometry">
          <rect>
-          <x>280</x>
-          <y>370</y>
-          <width>101</width>
-          <height>41</height>
+          <x>350</x>
+          <y>10</y>
+          <width>121</width>
+          <height>31</height>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">QPushButton {
-    background-color: #E45638;        /* Button background color */
-    color: white;                     /* Text color */
-    border: 2px solid #E45638;        /* Border color */
-    border-radius: 10px;              /* Rounded corners */
-    padding: 12px 24px;               /* Padding for the button */
-    font-size: 14px;                  /* Smaller font size */
-    font-weight: bold;                /* Font weight */
-    text-align: center;               /* Text alignment */
-    transition: all 0.3s ease-in-out;  /* Smooth transition for all properties */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  /* Initial shadow */
+         <string notr="true">QLineEdit {
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 0);
+    border: 2px solid #E45638;
+    border-radius: 5px;
+    padding: 5px;
 }
 
-QPushButton:hover {
-    background-color: #D14829;        /* Background color when hovered */
-    border: 2px solid #D14829;        /* Border color when hovered */
-    color: white;                     /* Text color when hovered */
-    cursor: pointer;                 /* Cursor becomes pointer */
-    transform: scale(1.1);            /* Slightly scale the button */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Increase shadow on hover */
-    filter: brightness(1.2);          /* Brighten the button */
+/* Hover effect */
+QLineEdit:hover {
+    border-color: #FF6A4D; /* Lighter shade on hover */
 }
 
-QPushButton:pressed {
-    background-color: #B23A24;        /* Background color when pressed */
-    border: 2px solid #B23A24;        /* Border color when pressed */
-    color: white;                     /* Text color when pressed */
-    transform: scale(0.95);           /* Slight shrinking effect */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);  /* Decrease shadow on press */
+/* When focused (clicked) */
+QLineEdit:focus {
+    border-color: #FF3C1F;
 }
 
-QPushButton:disabled {
-    background-color: #e0e0e0;        /* Background color when disabled */
-    color: #b0b0b0;                   /* Text color when disabled */
-    border: 2px solid #e0e0e0;        /* Border color when disabled */
-    cursor: not-allowed;              /* Cursor when disabled */
-    box-shadow: none;                 /* No shadow when disabled */
-}
-
-QPushButton::icon {
-    padding-left: 8px;                /* Icon padding */
-    padding-right: 8px;               /* Icon padding */
-}
-
-QPushButton::hover {
-    background-color: #D14829;        /* Background color on hover */
-    color: white;                     /* Text color on hover */
-    border: 2px solid #D14829;        /* Border color on hover */
-    transform: scale(1.1);            /* Scaling on hover */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Glowing effect on hover */
-}
-</string>
+/* Placeholder text */
+QLineEdit[placeholderText=&quot;&quot;] {
+    color: rgb(150, 150, 150); /* Placeholder color */
+}</string>
         </property>
-        <property name="text">
-         <string>afficher</string>
+        <property name="placeholderText">
+         <string>chercher</string>
         </property>
        </widget>
       </widget>
@@ -4403,6 +4368,19 @@ font: 700 9pt &quot;Microsoft YaHei UI&quot;;</string>
          <string>Historique des ventes</string>
         </property>
        </widget>
+       <widget class="QLabel" name="label_stat">
+        <property name="geometry">
+         <rect>
+          <x>300</x>
+          <y>50</y>
+          <width>411</width>
+          <height>321</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
       </widget>
      </widget>
     </widget>
@@ -4481,7 +4459,7 @@ QPushButton::hover {
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>201</width>
+      <width>191</width>
       <height>461</height>
      </rect>
     </property>
