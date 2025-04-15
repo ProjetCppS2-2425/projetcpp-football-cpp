@@ -23,4 +23,21 @@ int main(int argc, char *argv[])
 
 
     return a.exec();
+qApp->setStyleSheet(R"(
+    QMessageBox {
+        background-color: white;
+    }
+    QMessageBox QLabel {
+        color: black;
+        font-size: 14px;
+    }
+    QMessageBox QPushButton {
+        background-color: #e45638;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+    }
+)");
+
 }
+

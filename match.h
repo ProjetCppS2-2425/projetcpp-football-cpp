@@ -5,6 +5,11 @@
 #include <QDate>
 #include <QSqlQuery>
 #include <QSqlQueryModel>
+#include <QChartView>
+#include <QBarSet>
+#include <QBarSeries>
+#include <QBarCategoryAxis>
+#include <QValueAxis>
 
 class Match
 {
@@ -19,6 +24,12 @@ public:
     bool modifier(int ,QString , QString , QDate ,
                   QString , QString , QString );
     int nextid();
+    QSqlQueryModel* chercher (int);
+    bool PDF();
+    QChartView* stat();
+    QSqlQueryModel* trier(const QString& critere);
+    static QList<Match> getAllMatches();
+
     int getId() const { return id_m; }
     QString getEquipe1() const { return equipe1; }
     QString getEquipe2() const { return equipe2; }
