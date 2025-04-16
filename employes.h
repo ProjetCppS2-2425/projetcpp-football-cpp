@@ -13,7 +13,9 @@ public:
              QString poste, QString email, QString sexe, QString password,
              int idEntraineur, int idM); // Updated constructor with idEntraineur and idM
 
-    bool addToDatabase(); // Function to add data to the database
+    bool addToDatabase();
+    bool updateToDatabase(int id);
+    static bool deleteById(int id);    // Function to add data to the database
 
     static bool deleteFromDatabase(const QString &nom, const QString &prenom);
     static QSqlQuery getAllEmployes();

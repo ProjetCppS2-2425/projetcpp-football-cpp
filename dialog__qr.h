@@ -3,25 +3,27 @@
 
 #include <QPixmap>
 #include <QDialog>
+#include "Employes.h"
 
 namespace Ui {
-class Dialog__qr; // Remplacer dialog__qr par Dialog__qr
+class Dialog__qr;
 }
 
-class dialog__qr : public QDialog
+class Dialog__qr : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit dialog__qr(QWidget *parent = nullptr);
-    ~dialog__qr();
-    void setQrCode(QPixmap qrCode);
+    explicit Dialog__qr(QWidget *parent = nullptr);
+    ~Dialog__qr();
+    void setEmployeeInfo(const Employes& emp);
 
 private slots:
     void on_closedialog_clicked();
 
 private:
-    Ui::Dialog__qr *ui; // Remplacer dialog__qr par Dialog__qr
+    Ui::Dialog__qr *ui;
+    void generateQRCode(const QString& data);
 };
 
 #endif // DIALOG__QR_H
