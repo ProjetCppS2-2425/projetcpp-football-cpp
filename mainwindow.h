@@ -3,6 +3,16 @@
 
 #include <QMainWindow>
 #include "match.h"
+#include <QTableWidgetItem>
+#include <QDialog>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QPixmap>
+#include <QImage>
+
+
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,6 +27,8 @@ public:
     ~MainWindow();
 
 private slots:
+
+
     void on_pushButton_supprimer_clicked();
     void on_pushButton_modifier_clicked();
     void on_tableView_clicked(const QModelIndex &index);
@@ -24,7 +36,7 @@ private slots:
     void on_ajouterMatch_clicked();
 
 
-    void on_recherche_button_clicked();
+    void on_recherche_button_clicked(QString);
 
     void on_exporter_clicked();
 
@@ -45,11 +57,21 @@ private slots:
 
     void on_btnAnneePrecedente_clicked();
 
+    void on_btnAujourdhui_clicked();
+
+
+
+    void on_sms_clicked();
+
+    void on_micropush_clicked();
+
 private:
     Ui::MainWindow *ui;
     Match tmpMatch;
     void refreshTable();
     void clearInputFields();
+
     QDate moisAffiche;
+
 };
 #endif // MAINWINDOW_H

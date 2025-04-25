@@ -1257,13 +1257,13 @@ QComboBox QAbstractItemView {
      </widget>
     </widget>
     <widget class="QWidget" name="page2">
-     <widget class="QTabWidget" name="tabWidget_3">
+     <widget class="QTabWidget" name="page_calendar">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
         <width>751</width>
-        <height>471</height>
+        <height>481</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1296,6 +1296,9 @@ QTabBar::tab:hover {
     color: white;
 }</string>
       </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
       <widget class="QWidget" name="tab_6">
        <attribute name="title">
         <string>Accueil</string>
@@ -1304,7 +1307,7 @@ QTabBar::tab:hover {
         <property name="geometry">
          <rect>
           <x>260</x>
-          <y>89</y>
+          <y>110</y>
           <width>501</width>
           <height>271</height>
          </rect>
@@ -1325,7 +1328,7 @@ QTabBar::tab:hover {
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>30</y>
+            <y>40</y>
             <width>481</width>
             <height>221</height>
            </rect>
@@ -1341,332 +1344,48 @@ QTabBar::tab:hover {
 </string>
           </property>
          </widget>
-         <widget class="QPushButton" name="btnMoisPrecedent">
-          <property name="geometry">
-           <rect>
-            <x>170</x>
-            <y>220</y>
-            <width>131</width>
-            <height>41</height>
-           </rect>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-    background-color: #E45638;        /* Button background color */
-    color: white;                     /* Text color */
-    border: 2px solid #E45638;        /* Border color */
-    border-radius: 10px;              /* Rounded corners */
-    padding: 12px 24px;               /* Padding for the button */
-    font-size: 14px;                  /* Smaller font size */
-    font-weight: bold;                /* Font weight */
-    text-align: center;               /* Text alignment */
-    transition: all 0.3s ease-in-out;  /* Smooth transition for all properties */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  /* Initial shadow */
-}
-
-QPushButton:hover {
-    background-color: #D14829;        /* Background color when hovered */
-    border: 2px solid #D14829;        /* Border color when hovered */
-    color: white;                     /* Text color when hovered */
-    cursor: pointer;                 /* Cursor becomes pointer */
-    transform: scale(1.1);            /* Slightly scale the button */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Increase shadow on hover */
-    filter: brightness(1.2);          /* Brighten the button */
-}
-
-QPushButton:pressed {
-    background-color: #B23A24;        /* Background color when pressed */
-    border: 2px solid #B23A24;        /* Border color when pressed */
-    color: white;                     /* Text color when pressed */
-    transform: scale(0.95);           /* Slight shrinking effect */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);  /* Decrease shadow on press */
-}
-
-QPushButton:disabled {
-    background-color: #e0e0e0;        /* Background color when disabled */
-    color: #b0b0b0;                   /* Text color when disabled */
-    border: 2px solid #e0e0e0;        /* Border color when disabled */
-    cursor: not-allowed;              /* Cursor when disabled */
-    box-shadow: none;                 /* No shadow when disabled */
-}
-
-QPushButton::icon {
-    padding-left: 8px;                /* Icon padding */
-    padding-right: 8px;               /* Icon padding */
-}
-
-QPushButton::hover {
-    background-color: #D14829;        /* Background color on hover */
-    color: white;                     /* Text color on hover */
-    border: 2px solid #D14829;        /* Border color on hover */
-    transform: scale(1.1);            /* Scaling on hover */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Glowing effect on hover */
-}
-</string>
-          </property>
-          <property name="text">
-           <string>m precedent</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="btnMoisSuivant">
-          <property name="geometry">
-           <rect>
-            <x>180</x>
-            <y>170</y>
-            <width>131</width>
-            <height>41</height>
-           </rect>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-    background-color: #E45638;        /* Button background color */
-    color: white;                     /* Text color */
-    border: 2px solid #E45638;        /* Border color */
-    border-radius: 10px;              /* Rounded corners */
-    padding: 12px 24px;               /* Padding for the button */
-    font-size: 14px;                  /* Smaller font size */
-    font-weight: bold;                /* Font weight */
-    text-align: center;               /* Text alignment */
-    transition: all 0.3s ease-in-out;  /* Smooth transition for all properties */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  /* Initial shadow */
-}
-
-QPushButton:hover {
-    background-color: #D14829;        /* Background color when hovered */
-    border: 2px solid #D14829;        /* Border color when hovered */
-    color: white;                     /* Text color when hovered */
-    cursor: pointer;                 /* Cursor becomes pointer */
-    transform: scale(1.1);            /* Slightly scale the button */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Increase shadow on hover */
-    filter: brightness(1.2);          /* Brighten the button */
-}
-
-QPushButton:pressed {
-    background-color: #B23A24;        /* Background color when pressed */
-    border: 2px solid #B23A24;        /* Border color when pressed */
-    color: white;                     /* Text color when pressed */
-    transform: scale(0.95);           /* Slight shrinking effect */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);  /* Decrease shadow on press */
-}
-
-QPushButton:disabled {
-    background-color: #e0e0e0;        /* Background color when disabled */
-    color: #b0b0b0;                   /* Text color when disabled */
-    border: 2px solid #e0e0e0;        /* Border color when disabled */
-    cursor: not-allowed;              /* Cursor when disabled */
-    box-shadow: none;                 /* No shadow when disabled */
-}
-
-QPushButton::icon {
-    padding-left: 8px;                /* Icon padding */
-    padding-right: 8px;               /* Icon padding */
-}
-
-QPushButton::hover {
-    background-color: #D14829;        /* Background color on hover */
-    color: white;                     /* Text color on hover */
-    border: 2px solid #D14829;        /* Border color on hover */
-    transform: scale(1.1);            /* Scaling on hover */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Glowing effect on hover */
-}
-</string>
-          </property>
-          <property name="text">
-           <string>mois suivant</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="btnAnneeSuivante">
-          <property name="geometry">
-           <rect>
-            <x>320</x>
-            <y>170</y>
-            <width>131</width>
-            <height>41</height>
-           </rect>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-    background-color: #E45638;        /* Button background color */
-    color: white;                     /* Text color */
-    border: 2px solid #E45638;        /* Border color */
-    border-radius: 10px;              /* Rounded corners */
-    padding: 12px 24px;               /* Padding for the button */
-    font-size: 14px;                  /* Smaller font size */
-    font-weight: bold;                /* Font weight */
-    text-align: center;               /* Text alignment */
-    transition: all 0.3s ease-in-out;  /* Smooth transition for all properties */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  /* Initial shadow */
-}
-
-QPushButton:hover {
-    background-color: #D14829;        /* Background color when hovered */
-    border: 2px solid #D14829;        /* Border color when hovered */
-    color: white;                     /* Text color when hovered */
-    cursor: pointer;                 /* Cursor becomes pointer */
-    transform: scale(1.1);            /* Slightly scale the button */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Increase shadow on hover */
-    filter: brightness(1.2);          /* Brighten the button */
-}
-
-QPushButton:pressed {
-    background-color: #B23A24;        /* Background color when pressed */
-    border: 2px solid #B23A24;        /* Border color when pressed */
-    color: white;                     /* Text color when pressed */
-    transform: scale(0.95);           /* Slight shrinking effect */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);  /* Decrease shadow on press */
-}
-
-QPushButton:disabled {
-    background-color: #e0e0e0;        /* Background color when disabled */
-    color: #b0b0b0;                   /* Text color when disabled */
-    border: 2px solid #e0e0e0;        /* Border color when disabled */
-    cursor: not-allowed;              /* Cursor when disabled */
-    box-shadow: none;                 /* No shadow when disabled */
-}
-
-QPushButton::icon {
-    padding-left: 8px;                /* Icon padding */
-    padding-right: 8px;               /* Icon padding */
-}
-
-QPushButton::hover {
-    background-color: #D14829;        /* Background color on hover */
-    color: white;                     /* Text color on hover */
-    border: 2px solid #D14829;        /* Border color on hover */
-    transform: scale(1.1);            /* Scaling on hover */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Glowing effect on hover */
-}
-</string>
-          </property>
-          <property name="text">
-           <string>a suivant</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="btnAnneePrecedente">
-          <property name="geometry">
-           <rect>
-            <x>320</x>
-            <y>220</y>
-            <width>131</width>
-            <height>41</height>
-           </rect>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-    background-color: #E45638;        /* Button background color */
-    color: white;                     /* Text color */
-    border: 2px solid #E45638;        /* Border color */
-    border-radius: 10px;              /* Rounded corners */
-    padding: 12px 24px;               /* Padding for the button */
-    font-size: 14px;                  /* Smaller font size */
-    font-weight: bold;                /* Font weight */
-    text-align: center;               /* Text alignment */
-    transition: all 0.3s ease-in-out;  /* Smooth transition for all properties */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  /* Initial shadow */
-}
-
-QPushButton:hover {
-    background-color: #D14829;        /* Background color when hovered */
-    border: 2px solid #D14829;        /* Border color when hovered */
-    color: white;                     /* Text color when hovered */
-    cursor: pointer;                 /* Cursor becomes pointer */
-    transform: scale(1.1);            /* Slightly scale the button */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Increase shadow on hover */
-    filter: brightness(1.2);          /* Brighten the button */
-}
-
-QPushButton:pressed {
-    background-color: #B23A24;        /* Background color when pressed */
-    border: 2px solid #B23A24;        /* Border color when pressed */
-    color: white;                     /* Text color when pressed */
-    transform: scale(0.95);           /* Slight shrinking effect */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);  /* Decrease shadow on press */
-}
-
-QPushButton:disabled {
-    background-color: #e0e0e0;        /* Background color when disabled */
-    color: #b0b0b0;                   /* Text color when disabled */
-    border: 2px solid #e0e0e0;        /* Border color when disabled */
-    cursor: not-allowed;              /* Cursor when disabled */
-    box-shadow: none;                 /* No shadow when disabled */
-}
-
-QPushButton::icon {
-    padding-left: 8px;                /* Icon padding */
-    padding-right: 8px;               /* Icon padding */
-}
-
-QPushButton::hover {
-    background-color: #D14829;        /* Background color on hover */
-    color: white;                     /* Text color on hover */
-    border: 2px solid #D14829;        /* Border color on hover */
-    transform: scale(1.1);            /* Scaling on hover */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Glowing effect on hover */
-}
-</string>
-          </property>
-          <property name="text">
-           <string>a precedent</string>
-          </property>
-         </widget>
-         <widget class="QLabel" name="lblMoisAnnee">
+         <widget class="QLineEdit" name="lineEdit_lieu_2">
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>200</y>
-            <width>151</width>
-            <height>41</height>
-           </rect>
-          </property>
-          <property name="autoFillBackground">
-           <bool>false</bool>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QLabel {
-    color: white;
-    background-color: black;
-    font-size: 20px;
-    font-weight: bold;
-    padding: 5px;
-    border-radius: 8px;
-    qproperty-alignment: AlignCenter;
-}
-</string>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Shadow::Sunken</enum>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-         <widget class="QTableWidget" name="calendarTable">
-          <property name="geometry">
-           <rect>
-            <x>40</x>
-            <y>-10</y>
-            <width>411</width>
-            <height>211</height>
+            <y>10</y>
+            <width>141</width>
+            <height>31</height>
            </rect>
           </property>
           <property name="styleSheet">
-           <string notr="true">QTableView {
-    color: rgb(255, 255, 255); /* text color: white */
+           <string notr="true">QLineEdit {
+    color: rgb(255, 255, 255);
     border: 2px solid #E45638;
-    background-color: rgb(0, 0, 0); /* background color: black */
+    background-color: rgb(0, 0, 0);
     border-radius: 5px;
     padding: 5px;
-}
-</string>
+}</string>
           </property>
-          <property name="lineWidth">
-           <number>7</number>
+          <property name="placeholderText">
+           <string>Par lieu:</string>
           </property>
-          <property name="dragDropOverwriteMode">
-           <bool>false</bool>
+         </widget>
+         <widget class="QCheckBox" name="checkDescendant">
+          <property name="geometry">
+           <rect>
+            <x>370</x>
+            <y>0</y>
+            <width>121</width>
+            <height>31</height>
+           </rect>
           </property>
-          <property name="wordWrap">
-           <bool>false</bool>
+          <property name="styleSheet">
+           <string notr="true">QCheckBox {
+    color: rgb(255, 255, 255);
+    border: 2px solid #E45638;
+    background-color: rgb(0, 0, 0);
+    border-radius: 5px;
+    padding: 5px;
+}</string>
+          </property>
+          <property name="text">
+           <string>decsendant</string>
           </property>
          </widget>
         </widget>
@@ -1735,13 +1454,20 @@ QGroupBox::title {
          </property>
          <property name="dateTime">
           <datetime>
-           <hour>20</hour>
+           <hour>8</hour>
            <minute>0</minute>
            <second>0</second>
            <year>2024</year>
            <month>12</month>
            <day>31</day>
           </datetime>
+         </property>
+         <property name="minimumTime">
+          <time>
+           <hour>11</hour>
+           <minute>0</minute>
+           <second>0</second>
+          </time>
          </property>
         </widget>
         <widget class="QLineEdit" name="lineEdit_lieu">
@@ -2045,7 +1771,7 @@ color: white;</string>
          </property>
         </widget>
        </widget>
-       <widget class="QLineEdit" name="recherche">
+       <widget class="QLineEdit" name="lineEdit_equipe1_2">
         <property name="geometry">
          <rect>
           <x>270</x>
@@ -2064,15 +1790,15 @@ color: white;</string>
 }</string>
         </property>
         <property name="placeholderText">
-         <string>Rechercher...</string>
+         <string>Par equipe:</string>
         </property>
        </widget>
        <widget class="QComboBox" name="par">
         <property name="geometry">
          <rect>
-          <x>670</x>
+          <x>650</x>
           <y>60</y>
-          <width>71</width>
+          <width>81</width>
           <height>31</height>
          </rect>
         </property>
@@ -2095,7 +1821,7 @@ border-radius: 5px;
         </property>
         <item>
          <property name="text">
-          <string>Date</string>
+          <string>Date_m</string>
          </property>
         </item>
         <item>
@@ -2105,7 +1831,7 @@ border-radius: 5px;
         </item>
         <item>
          <property name="text">
-          <string>Stade</string>
+          <string>Lieu</string>
          </property>
         </item>
        </widget>
@@ -2168,7 +1894,7 @@ QPushButton:pressed {
        <widget class="QPushButton" name="recherche_button">
         <property name="geometry">
          <rect>
-          <x>420</x>
+          <x>440</x>
           <y>60</y>
           <width>91</width>
           <height>31</height>
@@ -2224,7 +1950,7 @@ QPushButton::icon {
        <widget class="QPushButton" name="exporter">
         <property name="geometry">
          <rect>
-          <x>630</x>
+          <x>610</x>
           <y>0</y>
           <width>131</width>
           <height>41</height>
@@ -2322,11 +2048,193 @@ QPushButton:pressed {
          <string>modifier</string>
         </property>
        </widget>
+       <widget class="QPushButton" name="tri">
+        <property name="geometry">
+         <rect>
+          <x>550</x>
+          <y>60</y>
+          <width>91</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+    background-color: #E45638;
+    color: white;
+    border: 2px solid #E45638;
+    border-radius: 4px;               /* Smaller rounded corners */
+    padding: 4px 8px;                 /* Minimal padding */
+    font-size: 11px;                  /* Smaller font size */
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.15s ease-in-out; /* Faster transition */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+QPushButton:hover {
+    background-color: #D14829;
+    border: 2px solid #D14829;
+    transform: scale(1.03);          /* Very slight scaling */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    filter: brightness(1.05);
+}
+
+QPushButton:pressed {
+    background-color: #B23A24;
+    border: 2px solid #B23A24;
+    transform: scale(0.95);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+QPushButton:disabled {
+    background-color: #e0e0e0;
+    color: #b0b0b0;
+    border: 2px solid #e0e0e0;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+QPushButton::icon {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+</string>
+        </property>
+        <property name="text">
+         <string>trier par</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_id_2">
+        <property name="geometry">
+         <rect>
+          <x>270</x>
+          <y>90</y>
+          <width>141</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLineEdit {
+    color: rgb(255, 255, 255);
+    border: 2px solid #E45638;
+    background-color: rgb(0, 0, 0);
+    border-radius: 5px;
+    padding: 5px;
+}</string>
+        </property>
+        <property name="placeholderText">
+         <string>Par id:</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="micro">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>0</y>
+          <width>241</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLineEdit {
+    color: rgb(255, 255, 255);
+    border: 2px solid #E45638;
+    background-color: rgb(0, 0, 0);
+    border-radius: 5px;
+    padding: 5px;
+}</string>
+        </property>
+        <property name="placeholderText">
+         <string>parler...</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="micropush">
+        <property name="geometry">
+         <rect>
+          <x>270</x>
+          <y>0</y>
+          <width>81</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+    background-color: #E45638;
+    color: white;
+    border: 2px solid #E45638;
+    border-radius: 4px;               /* Smaller rounded corners */
+    padding: 4px 8px;                 /* Minimal padding */
+    font-size: 11px;                  /* Smaller font size */
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.15s ease-in-out; /* Faster transition */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+QPushButton:hover {
+    background-color: #D14829;
+    border: 2px solid #D14829;
+    transform: scale(1.03);          /* Very slight scaling */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    filter: brightness(1.05);
+}
+
+QPushButton:pressed {
+    background-color: #B23A24;
+    border: 2px solid #B23A24;
+    transform: scale(0.95);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+QPushButton:disabled {
+    background-color: #e0e0e0;
+    color: #b0b0b0;
+    border: 2px solid #e0e0e0;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+QPushButton::icon {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelStatus">
+        <property name="geometry">
+         <rect>
+          <x>290</x>
+          <y>0</y>
+          <width>61</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(255, 255, 255);
+    background-color: #E45638;
+
+    border-radius: 10px;              /* Rounded corners */
+
+</string>
+        </property>
+        <property name="text">
+         <string>Micro</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_10">
+       <attribute name="title">
+        <string>stat</string>
+       </attribute>
        <widget class="QPushButton" name="stat">
         <property name="geometry">
          <rect>
-          <x>490</x>
-          <y>0</y>
+          <x>270</x>
+          <y>20</y>
           <width>131</width>
           <height>41</height>
          </rect>
@@ -2389,67 +2297,29 @@ QPushButton::hover {
          <string>stats</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="tri">
+       <widget class="QGraphicsView" name="graphicsView">
         <property name="geometry">
          <rect>
-          <x>570</x>
-          <y>60</y>
-          <width>91</width>
-          <height>31</height>
+          <x>10</x>
+          <y>70</y>
+          <width>751</width>
+          <height>361</height>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">QPushButton {
-    background-color: #E45638;
-    color: white;
-    border: 2px solid #E45638;
-    border-radius: 4px;               /* Smaller rounded corners */
-    padding: 4px 8px;                 /* Minimal padding */
-    font-size: 11px;                  /* Smaller font size */
-    font-weight: bold;
-    text-align: center;
-    transition: all 0.15s ease-in-out; /* Faster transition */
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-}
-
-QPushButton:hover {
-    background-color: #D14829;
-    border: 2px solid #D14829;
-    transform: scale(1.03);          /* Very slight scaling */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    filter: brightness(1.05);
-}
-
-QPushButton:pressed {
-    background-color: #B23A24;
-    border: 2px solid #B23A24;
-    transform: scale(0.95);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-}
-
-QPushButton:disabled {
-    background-color: #e0e0e0;
-    color: #b0b0b0;
-    border: 2px solid #e0e0e0;
-    cursor: not-allowed;
-    box-shadow: none;
-}
-
-QPushButton::icon {
-    padding-left: 2px;
-    padding-right: 2px;
-}
-</string>
-        </property>
-        <property name="text">
-         <string>trier par</string>
+         <string notr="true">background-color: rgb(230, 230, 230);</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="calendarButton">
+      </widget>
+      <widget class="QWidget" name="tab_9">
+       <attribute name="title">
+        <string>calendar</string>
+       </attribute>
+       <widget class="QPushButton" name="btnMoisSuivant">
         <property name="geometry">
          <rect>
-          <x>330</x>
-          <y>0</y>
+          <x>390</x>
+          <y>80</y>
           <width>131</width>
           <height>41</height>
          </rect>
@@ -2509,7 +2379,344 @@ QPushButton::hover {
 </string>
         </property>
         <property name="text">
-         <string>calendar</string>
+         <string>mois suivant</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnAnneeSuivante">
+        <property name="geometry">
+         <rect>
+          <x>550</x>
+          <y>160</y>
+          <width>131</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+    background-color: #E45638;        /* Button background color */
+    color: white;                     /* Text color */
+    border: 2px solid #E45638;        /* Border color */
+    border-radius: 10px;              /* Rounded corners */
+    padding: 12px 24px;               /* Padding for the button */
+    font-size: 14px;                  /* Smaller font size */
+    font-weight: bold;                /* Font weight */
+    text-align: center;               /* Text alignment */
+    transition: all 0.3s ease-in-out;  /* Smooth transition for all properties */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  /* Initial shadow */
+}
+
+QPushButton:hover {
+    background-color: #D14829;        /* Background color when hovered */
+    border: 2px solid #D14829;        /* Border color when hovered */
+    color: white;                     /* Text color when hovered */
+    cursor: pointer;                 /* Cursor becomes pointer */
+    transform: scale(1.1);            /* Slightly scale the button */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Increase shadow on hover */
+    filter: brightness(1.2);          /* Brighten the button */
+}
+
+QPushButton:pressed {
+    background-color: #B23A24;        /* Background color when pressed */
+    border: 2px solid #B23A24;        /* Border color when pressed */
+    color: white;                     /* Text color when pressed */
+    transform: scale(0.95);           /* Slight shrinking effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);  /* Decrease shadow on press */
+}
+
+QPushButton:disabled {
+    background-color: #e0e0e0;        /* Background color when disabled */
+    color: #b0b0b0;                   /* Text color when disabled */
+    border: 2px solid #e0e0e0;        /* Border color when disabled */
+    cursor: not-allowed;              /* Cursor when disabled */
+    box-shadow: none;                 /* No shadow when disabled */
+}
+
+QPushButton::icon {
+    padding-left: 8px;                /* Icon padding */
+    padding-right: 8px;               /* Icon padding */
+}
+
+QPushButton::hover {
+    background-color: #D14829;        /* Background color on hover */
+    color: white;                     /* Text color on hover */
+    border: 2px solid #D14829;        /* Border color on hover */
+    transform: scale(1.1);            /* Scaling on hover */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Glowing effect on hover */
+}
+</string>
+        </property>
+        <property name="text">
+         <string>a suivant</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnMoisPrecedent">
+        <property name="geometry">
+         <rect>
+          <x>550</x>
+          <y>80</y>
+          <width>131</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+    background-color: #E45638;        /* Button background color */
+    color: white;                     /* Text color */
+    border: 2px solid #E45638;        /* Border color */
+    border-radius: 10px;              /* Rounded corners */
+    padding: 12px 24px;               /* Padding for the button */
+    font-size: 14px;                  /* Smaller font size */
+    font-weight: bold;                /* Font weight */
+    text-align: center;               /* Text alignment */
+    transition: all 0.3s ease-in-out;  /* Smooth transition for all properties */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  /* Initial shadow */
+}
+
+QPushButton:hover {
+    background-color: #D14829;        /* Background color when hovered */
+    border: 2px solid #D14829;        /* Border color when hovered */
+    color: white;                     /* Text color when hovered */
+    cursor: pointer;                 /* Cursor becomes pointer */
+    transform: scale(1.1);            /* Slightly scale the button */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Increase shadow on hover */
+    filter: brightness(1.2);          /* Brighten the button */
+}
+
+QPushButton:pressed {
+    background-color: #B23A24;        /* Background color when pressed */
+    border: 2px solid #B23A24;        /* Border color when pressed */
+    color: white;                     /* Text color when pressed */
+    transform: scale(0.95);           /* Slight shrinking effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);  /* Decrease shadow on press */
+}
+
+QPushButton:disabled {
+    background-color: #e0e0e0;        /* Background color when disabled */
+    color: #b0b0b0;                   /* Text color when disabled */
+    border: 2px solid #e0e0e0;        /* Border color when disabled */
+    cursor: not-allowed;              /* Cursor when disabled */
+    box-shadow: none;                 /* No shadow when disabled */
+}
+
+QPushButton::icon {
+    padding-left: 8px;                /* Icon padding */
+    padding-right: 8px;               /* Icon padding */
+}
+
+QPushButton::hover {
+    background-color: #D14829;        /* Background color on hover */
+    color: white;                     /* Text color on hover */
+    border: 2px solid #D14829;        /* Border color on hover */
+    transform: scale(1.1);            /* Scaling on hover */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Glowing effect on hover */
+}
+</string>
+        </property>
+        <property name="text">
+         <string>m precedent</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnAnneePrecedente">
+        <property name="geometry">
+         <rect>
+          <x>390</x>
+          <y>160</y>
+          <width>131</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+    background-color: #E45638;        /* Button background color */
+    color: white;                     /* Text color */
+    border: 2px solid #E45638;        /* Border color */
+    border-radius: 10px;              /* Rounded corners */
+    padding: 12px 24px;               /* Padding for the button */
+    font-size: 14px;                  /* Smaller font size */
+    font-weight: bold;                /* Font weight */
+    text-align: center;               /* Text alignment */
+    transition: all 0.3s ease-in-out;  /* Smooth transition for all properties */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  /* Initial shadow */
+}
+
+QPushButton:hover {
+    background-color: #D14829;        /* Background color when hovered */
+    border: 2px solid #D14829;        /* Border color when hovered */
+    color: white;                     /* Text color when hovered */
+    cursor: pointer;                 /* Cursor becomes pointer */
+    transform: scale(1.1);            /* Slightly scale the button */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Increase shadow on hover */
+    filter: brightness(1.2);          /* Brighten the button */
+}
+
+QPushButton:pressed {
+    background-color: #B23A24;        /* Background color when pressed */
+    border: 2px solid #B23A24;        /* Border color when pressed */
+    color: white;                     /* Text color when pressed */
+    transform: scale(0.95);           /* Slight shrinking effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);  /* Decrease shadow on press */
+}
+
+QPushButton:disabled {
+    background-color: #e0e0e0;        /* Background color when disabled */
+    color: #b0b0b0;                   /* Text color when disabled */
+    border: 2px solid #e0e0e0;        /* Border color when disabled */
+    cursor: not-allowed;              /* Cursor when disabled */
+    box-shadow: none;                 /* No shadow when disabled */
+}
+
+QPushButton::icon {
+    padding-left: 8px;                /* Icon padding */
+    padding-right: 8px;               /* Icon padding */
+}
+
+QPushButton::hover {
+    background-color: #D14829;        /* Background color on hover */
+    color: white;                     /* Text color on hover */
+    border: 2px solid #D14829;        /* Border color on hover */
+    transform: scale(1.1);            /* Scaling on hover */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Glowing effect on hover */
+}
+</string>
+        </property>
+        <property name="text">
+         <string>a precedent</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="txt_match_details">
+        <property name="geometry">
+         <rect>
+          <x>330</x>
+          <y>-10</y>
+          <width>411</width>
+          <height>61</height>
+         </rect>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLabel {
+    color: white;
+    background-color: black;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 8px;
+    qproperty-alignment: AlignCenter;
+}
+</string>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Sunken</enum>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lblMoisAnnee">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>350</y>
+          <width>161</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLabel {
+    color: rgb(255, 255, 255);
+    border: 2px solid #E45638;
+    background-color: rgb(0, 0, 0);
+    border-radius: 5px;
+    padding: 5px;
+}</string>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Sunken</enum>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="sms">
+        <property name="geometry">
+         <rect>
+          <x>580</x>
+          <y>290</y>
+          <width>131</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+    background-color: #E45638;        /* Button background color */
+    color: white;                     /* Text color */
+    border: 2px solid #E45638;        /* Border color */
+    border-radius: 10px;              /* Rounded corners */
+    padding: 12px 24px;               /* Padding for the button */
+    font-size: 14px;                  /* Smaller font size */
+    font-weight: bold;                /* Font weight */
+    text-align: center;               /* Text alignment */
+    transition: all 0.3s ease-in-out;  /* Smooth transition for all properties */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  /* Initial shadow */
+}
+
+QPushButton:hover {
+    background-color: #D14829;        /* Background color when hovered */
+    border: 2px solid #D14829;        /* Border color when hovered */
+    color: white;                     /* Text color when hovered */
+    cursor: pointer;                 /* Cursor becomes pointer */
+    transform: scale(1.1);            /* Slightly scale the button */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Increase shadow on hover */
+    filter: brightness(1.2);          /* Brighten the button */
+}
+
+QPushButton:pressed {
+    background-color: #B23A24;        /* Background color when pressed */
+    border: 2px solid #B23A24;        /* Border color when pressed */
+    color: white;                     /* Text color when pressed */
+    transform: scale(0.95);           /* Slight shrinking effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);  /* Decrease shadow on press */
+}
+
+QPushButton:disabled {
+    background-color: #e0e0e0;        /* Background color when disabled */
+    color: #b0b0b0;                   /* Text color when disabled */
+    border: 2px solid #e0e0e0;        /* Border color when disabled */
+    cursor: not-allowed;              /* Cursor when disabled */
+    box-shadow: none;                 /* No shadow when disabled */
+}
+
+QPushButton::icon {
+    padding-left: 8px;                /* Icon padding */
+    padding-right: 8px;               /* Icon padding */
+}
+
+QPushButton::hover {
+    background-color: #D14829;        /* Background color on hover */
+    color: white;                     /* Text color on hover */
+    border: 2px solid #D14829;        /* Border color on hover */
+    transform: scale(1.1);            /* Scaling on hover */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Glowing effect on hover */
+}
+</string>
+        </property>
+        <property name="text">
+         <string>a suivant</string>
+        </property>
+       </widget>
+       <widget class="QCalendarWidget" name="calendarTable">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>90</y>
+          <width>320</width>
+          <height>236</height>
+         </rect>
         </property>
        </widget>
       </widget>

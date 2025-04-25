@@ -2,11 +2,21 @@
 #include <QApplication>
 #include <QMessageBox>
 #include "connection.h"
+#include <QMetaType>
+#include "match.h"
 int main(int argc, char *argv[])
 {
+
     QApplication a(argc, argv);
+
+
     MainWindow w;
+
+    //w.show();
+
     Connection c;
+
+
     bool test=c.createconnect();
     if(test)
     {w.show();

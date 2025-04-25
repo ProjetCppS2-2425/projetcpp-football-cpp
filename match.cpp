@@ -2,15 +2,31 @@
 #include <QDebug>
 #include <QPainter>
 #include <QPdfWriter>
+#include <QSqlError>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QUrl>
+#include <QUrlQuery>
+#include <QJsonDocument>
+#include <QJsonObject>
 Match::Match()
 {
 }
 
-Match::Match(int id_m, const QString &equipe1, const QString &equipe2, const QDate &date,
-             const QString &lieu, const QString &type, const QString &etat)
-    : id_m(id_m), equipe1(equipe1), equipe2(equipe2), date(date), lieu(lieu), type(type), etat(etat)
+
+Match::Match(int id_m, QString equipe1, QString equipe2, QDate date, QString lieu, QString type, QString etat)
 {
+    this->id_m = id_m;
+    this->equipe1 = equipe1;
+    this->equipe2 = equipe2;
+    this->date = date;
+    this->lieu = lieu;
+    this->type = type;
+    this->etat = etat;
 }
+
+
 bool Match::ajouter()
 {
     QSqlQuery query;
@@ -67,12 +83,14 @@ bool Match::supprimer(int id_m)
     return query.exec();
 }
 
-bool Match::modifier(int id_m,QString equipe1, QString equipe2, QDate date,
-                      QString lieu, QString type, QString etat)
+bool Match::modifier(int id_m, QString equipe1, QString equipe2, QDate date, 
+                    QString lieu, QString type, QString etat)
 {
     QSqlQuery query;
-    query.prepare("UPDATE match SET equipe1 = :equipe1, equipe2 = :equipe2, date_m = :date, "
-                  "lieu = :lieu, type_m = :type, etat = :etat WHERE id_m = :id_m");
+    query.prepare("UPDATE MATCHS SET EQUIPE1=:equipe1, EQUIPE2=:equipe2, DATE_M=:date, "
+                 "LIEU=:lieu, TYPE_M=:type, ETAT=:etat "
+                 "WHERE ID_M=:id_m");
+
     query.bindValue(":id_m", id_m);
     query.bindValue(":equipe1", equipe1);
     query.bindValue(":equipe2", equipe2);
@@ -80,33 +98,60 @@ bool Match::modifier(int id_m,QString equipe1, QString equipe2, QDate date,
     query.bindValue(":lieu", lieu);
     query.bindValue(":type", type);
     query.bindValue(":etat", etat);
-    return query.exec();
-}
-QSqlQueryModel* Match::chercher (int id)
-{
-    QSqlQueryModel * model=new QSqlQueryModel();
-    QSqlQuery query;
-    query.prepare("select * from MATCH where ID_M= :id");
-    query.bindValue(":id", id);
-    if (query.exec())
-    {
-        model->setQuery(std::move(query));
-        model->setHeaderData(0,Qt::Horizontal,QObject::tr("ID_M"));
-        model->setHeaderData(1,Qt::Horizontal,QObject::tr("EQUIPE1"));
-        model->setHeaderData(2,Qt::Horizontal,QObject::tr("EQUIPE2"));
-        model->setHeaderData(3,Qt::Horizontal,QObject::tr("DATE_M"));
 
-        model->setHeaderData(4,Qt::Horizontal,QObject::tr("LIEU"));
-        model->setHeaderData(5,Qt::Horizontal,QObject::tr("TYPE_M"));
-        model->setHeaderData(6,Qt::Horizontal,QObject::tr("EQ1_BUT"));
-        model->setHeaderData(7,Qt::Horizontal,QObject::tr("EQ2_BUT"));
-        model->setHeaderData(8,Qt::Horizontal,QObject::tr("ETAT"));
-        model->setHeaderData(6,Qt::Horizontal,QObject::tr("ID_E"));
+
+   /* bool success = query.exec();
+    if (success) {
+        this->num_equipe1 = num1;
+        this->num_equipe2 = num2;  // Envoyer SMS après modification réussie
     }
+    return success;*/
+}
+QSqlQueryModel* Match::chercherAvance(const QString& id, const QString& lieu, const QString& equipe1)
+{
+    QSqlQueryModel* model = new QSqlQueryModel();
+    QSqlQuery query;
 
+    QString queryString = "SELECT * FROM MATCH WHERE 1=1"; // permet d'ajouter des conditions facilement
+
+    if (!id.isEmpty())
+        queryString += " AND ID_M = :id";
+    if (!lieu.isEmpty())
+        queryString += " AND LIEU LIKE :lieu";
+    if (!equipe1.isEmpty())
+        queryString += " AND EQUIPE1 LIKE :equipe1";
+
+    query.prepare(queryString);
+
+    if (!id.isEmpty())
+        query.bindValue(":id", id.toInt());
+    if (!lieu.isEmpty())
+        query.bindValue(":lieu", "%" + lieu + "%");
+    if (!equipe1.isEmpty())
+        query.bindValue(":equipe1", "%" + equipe1 + "%");
+
+    if (query.exec()) {
+        model->setQuery(std::move(query));
+
+        model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID_M"));
+        model->setHeaderData(1, Qt::Horizontal, QObject::tr("EQUIPE1"));
+        model->setHeaderData(2, Qt::Horizontal, QObject::tr("EQUIPE2"));
+        model->setHeaderData(3, Qt::Horizontal, QObject::tr("DATE_M"));
+        model->setHeaderData(4, Qt::Horizontal, QObject::tr("LIEU"));
+        model->setHeaderData(5, Qt::Horizontal, QObject::tr("TYPE_M"));
+        model->setHeaderData(6, Qt::Horizontal, QObject::tr("EQ1_BUT"));
+        model->setHeaderData(7, Qt::Horizontal, QObject::tr("EQ2_BUT"));
+        model->setHeaderData(8, Qt::Horizontal, QObject::tr("ETAT"));
+        model->setHeaderData(9, Qt::Horizontal, QObject::tr("ID_E"));
+    } else {
+        qDebug() << "Erreur SQL : " << query.lastError().text();
+        delete model;
+        return nullptr;
+    }
 
     return model;
 }
+
 bool Match::PDF() {
     // Step 1: Execute SQL query to retrieve data
     QSqlQuery query("SELECT * FROM MATCH");
@@ -243,34 +288,23 @@ QChartView* Match::stat() {
     return chartView;
 }
 
-QSqlQueryModel* Match::trier(const QString& critere)
+QSqlQueryModel* Match::trier(const QString& critere, bool desc)
 {
     QSqlQueryModel* model = new QSqlQueryModel();
-    QSqlQuery query;
+    QString ordre = desc ? "DESC" : "ASC";
 
-    if (critere == "date") {
-        query.prepare ("SELECT * FROM MATCH ORDER BY date_m DESC");        ;
-    } else if (critere == "equipe1") {
-        query.prepare ("SELECT * FROM MATCH ORDER BY equipe1 ASC"); // ou equipe2 si tu préfères
-    } else if (critere == "stade") {
-        query.prepare("SELECT * FROM MATCH ORDER BY lieu ASC");
-    }
+    QString query = "SELECT * FROM match ORDER BY " + critere + " " + ordre;
+    model->setQuery(query);
 
-    if (query.exec()) {
-        model->setQuery(std::move(query));
-        model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-        model->setHeaderData(1, Qt::Horizontal, QObject::tr("Équipe 1"));
-        model->setHeaderData(2, Qt::Horizontal, QObject::tr("Équipe 2"));
-        model->setHeaderData(3, Qt::Horizontal, QObject::tr("Date"));
-        model->setHeaderData(4, Qt::Horizontal, QObject::tr("Lieu"));
-        model->setHeaderData(5, Qt::Horizontal, QObject::tr("Type"));
-        model->setHeaderData(6, Qt::Horizontal, QObject::tr("Score Équipe 1"));
-        model->setHeaderData(7, Qt::Horizontal, QObject::tr("Score Équipe 2"));
-        model->setHeaderData(8, Qt::Horizontal, QObject::tr("ID Événement"));
+    if (model->lastError().isValid()) {
+        qDebug() << "Erreur SQL: " << model->lastError().text();
+        delete model;
+        return nullptr;
     }
 
     return model;
 }
+
 
 QList<Match> Match::getAllMatches()
 {
@@ -288,4 +322,111 @@ QList<Match> Match::getAllMatches()
     return list;
 }
 
+/*bool Match::envoyerSMS() const
+{
+    // Vérifier si les numéros sont valides
+    if (num_equipe1.isEmpty() && num_equipe2.isEmpty()) {
+        return false;
+    }
 
+    // Préparer le message
+    QString message = QString("Match programmé : %1 vs %2\nDate : %3\nLieu : %4\nType : %5")
+                         .arg(equipe1)
+                         .arg(equipe2)
+                         .arg(date.toString("dd/MM/yyyy"))
+                         .arg(lieu)
+                         .arg(type);
+
+    // Utiliser un service SMS (exemple avec Twilio)
+    // Note : Vous devrez implémenter cette partie selon le service SMS que vous utilisez
+    if (!num_equipe1.isEmpty()) {
+        // Envoyer SMS à l'équipe 1
+        envoyerSMSViaService(num_equipe1, message);
+    }
+    
+    if (!num_equipe2.isEmpty()) {
+        // Envoyer SMS à l'équipe 2
+        envoyerSMSViaService(num_equipe2, message);
+    }
+
+    return true;
+}*/
+
+/*void Match::envoyerSMSViaService(const QString& numero, const QString& message)
+{
+    // Paramètres Twilio (à sécuriser dans un fichier de config ou des variables d'environnement)
+    const QString accountSid = "AC630d8a2a4de622db731837e2aed43ac5";
+    const QString authToken = "4dd52bef09a387d482bacce1f789f1f1";
+    const QString twilioNumber = "+21627917702";
+
+    // Création du gestionnaire de requête réseau
+    QNetworkAccessManager* manager = new QNetworkAccessManager();  // Pas de parent
+
+    QNetworkReply* reply = manager->post(request, params.toString(QUrl::FullyEncoded).toUtf8());
+
+    connect(reply, &QNetworkReply::finished, [reply, manager]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray response = reply->readAll();
+            QJsonDocument jsonResponse = QJsonDocument::fromJson(response);
+            QJsonObject jsonObject = jsonResponse.object();
+
+            if (jsonObject.contains("status") && jsonObject["status"].toString() == "queued") {
+                qDebug() << "✅ SMS envoyé avec succès.";
+            } else {
+                qDebug() << "❌ Erreur Twilio:" << jsonObject["message"].toString();
+            }
+        } else {
+            qDebug() << "❌ Erreur réseau:" << reply->errorString();
+        }
+
+        reply->deleteLater();
+        manager->deleteLater();  // ✅ important pour éviter fuite mémoire
+    });
+}*/
+
+void Match::sendSMS(const QString& toNumber, const QString& messageText)
+{
+    QString accountSid = "AC630d8a2a4de622db731837e2aed43ac5";
+    QString authToken = "4dd52bef09a387d482bacce1f789f1f1";
+    QString twilioNumber = "+15075756781"; // Must be verified by Twilio
+
+    // Twilio API URL
+    QString urlStr = "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json";
+    QUrl url(urlStr);
+    QNetworkRequest request(url);
+
+    // Auth header
+    QString credentials = accountSid + ":" + authToken;
+    QByteArray authHeader = "Basic " + credentials.toLocal8Bit().toBase64();
+    request.setRawHeader("Authorization", authHeader);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+    // Message parameters
+
+    QUrlQuery postData;
+    postData.addQueryItem("To", toNumber);
+    postData.addQueryItem("From", twilioNumber);
+    postData.addQueryItem("Body", messageText);
+
+    // Send the POST request
+    QNetworkAccessManager* manager = new QNetworkAccessManager();
+    QNetworkReply* reply = manager->post(request, postData.toString(QUrl::FullyEncoded).toUtf8());
+    qDebug() << "To:" << toNumber;
+    qDebug() << "From:" << twilioNumber;
+    qDebug() << "Body:" << messageText;
+    qDebug() << "POST data:" << postData.toString(QUrl::FullyEncoded);
+
+
+    QObject::connect(reply, &QNetworkReply::finished, [reply, manager]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray response = reply->readAll();
+            qDebug() << "✅ SMS sent successfully!";
+            qDebug() << response;
+        } else {
+            qDebug() << "❌ Network error:" << reply->errorString();
+
+        }
+        reply->deleteLater();
+        manager->deleteLater();
+    });
+}

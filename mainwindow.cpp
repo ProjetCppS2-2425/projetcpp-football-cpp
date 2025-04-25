@@ -5,13 +5,31 @@
 #include <QMessageBox>
 #include <QDate>
 #include <QVBoxLayout>
-
+#include "match.h"
+#include <QPainter>
+#include <QtCharts/QChartView>
+#include <QtCharts/QPieSeries>
+#include <QtCharts/QPieSlice>
+#include <QGraphicsScene>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QDebug>
+#include <QProcess>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    QSqlQueryModel* modelInitial = tmpMatch.afficher();
+    if (modelInitial) {
+        ui->tableView->setModel(modelInitial);
+        ui->tableView->resizeColumnsToContents();
+        ui->tableView->resizeRowsToContents();
+    }
+
+
 
     Connection conn;
     if(!conn.createconnect())
@@ -23,6 +41,11 @@ MainWindow::MainWindow(QWidget *parent)
     moisAffiche = QDate::currentDate();
     genererCalendrier(Match::getAllMatches(), moisAffiche);
     updateMoisLabel(); // <-- très important
+  //  connect(ui->checkDescendant, &QCheckBox::stateChanged, this, &MainWindow::on_tri_clicked);
+    ui->btnMoisSuivant->setCursor(Qt::PointingHandCursor);
+    ui->btnMoisPrecedent->setCursor(Qt::PointingHandCursor);
+    ui->btnAnneeSuivante->setCursor(Qt::PointingHandCursor);
+    ui->btnAnneePrecedente->setCursor(Qt::PointingHandCursor);
 
 }
 
@@ -46,21 +69,6 @@ MainWindow::~MainWindow()
 
 
 
- /*   if(success)
-    {
-        ui->tableView->setModel(tmpMatch.afficher());
-
-        QMessageBox::information(nullptr, QObject::tr("OK"),
-                                 QObject::tr("Ajout effectué.\n"
-                                             "Click Cancel to exit."), QMessageBox::Cancel);
-        refreshTable();
-    }
-    else
-        QMessageBox::critical(nullptr, QObject::tr("Not OK"),
-                              QObject::tr("Ajout non effectué.\n"
-                                          "Click Cancel to exit."), QMessageBox::Cancel);
-
-}*/
 
 void MainWindow::on_pushButton_supprimer_clicked()
 {
@@ -80,6 +88,21 @@ void MainWindow::on_pushButton_supprimer_clicked()
         QMessageBox::critical(nullptr, QObject::tr("Not OK"),
                               QObject::tr("Suppression non effectuée.\n"
                                           "Click Cancel to exit."), QMessageBox::Cancel);
+    qApp->setStyleSheet(R"(
+    QMessageBox {
+        background-color: white;
+    }
+    QMessageBox QLabel {
+        color: black;
+        font-size: 14px;
+    }
+    QMessageBox QPushButton {
+        background-color: #e45638;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+    }
+)");
 }
 
 void MainWindow::on_pushButton_modifier_clicked()
@@ -93,6 +116,7 @@ void MainWindow::on_pushButton_modifier_clicked()
     QString lieu = ui->lineEdit_lieu->text();
     QString type = ui->comboBox_type->currentText();
     QString etat = ui->comboBox_etat->currentText();
+
 
 
     bool success = tmpMatch.modifier( id_m, equipe1,  equipe2,  date,
@@ -205,19 +229,53 @@ void MainWindow::on_ajouterMatch_clicked()
 
 
 
-void MainWindow::on_recherche_button_clicked()
+void MainWindow::on_recherche_button_clicked(QString output )
 {
-    int id=ui->recherche->text().toInt();
-    QSqlQueryModel* sortedModel = tmpMatch.chercher(id);
+    QString id = ui->lineEdit_id_2->text();           // champ de recherche pour ID
+    QString lieu = ui->lineEdit_lieu_2->text();       // champ pour le lieu
+    QString equipe1 = ui->lineEdit_equipe1_2->text(); // champ pour l'équipe 1
+
+    QSqlQueryModel* sortedModel = tmpMatch.chercherAvance(id, lieu, equipe1);
+
     if (sortedModel) {
-
         ui->tableView->setModel(sortedModel);
+        QMessageBox msgBox;
+        msgBox.setStyleSheet("QMessageBox { background-color: white; color: black; }"
+                             "QLabel { color: black; }"
+                             "QPushButton { background-color: lightgray; color: black; }");
 
-        QMessageBox::information(nullptr, QObject::tr("OK"), QObject::tr("recherche effectué.\nClick Cancel to exit."), QMessageBox::Cancel);
+        msgBox.setWindowTitle("Recherche");
+        msgBox.setText("Recherche effectuée avec succès.");
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.exec();
+
     } else {
+        QMessageBox msgBox;
+        msgBox.setStyleSheet("QMessageBox { background-color: white; color: black; }"
+                             "QLabel { color: black; }"
+                             "QPushButton { background-color: lightgray; color: black; }");
 
-        QMessageBox::critical(nullptr, QObject::tr("Not OK"), QObject::tr("recherche non effectué.\nClick Cancel to exit."), QMessageBox::Cancel);
+        msgBox.setWindowTitle("Erreur");
+        msgBox.setText("Une erreur est survenue.");
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.exec();
+
     }
+    qApp->setStyleSheet(R"(
+    QMessageBox {
+        background-color: white;
+    }
+    QMessageBox QLabel {
+        color: black;
+        font-size: 14px;
+    }
+    QMessageBox QPushButton {
+        background-color: #e45638;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+    }
+)");
 }
 
 
@@ -233,28 +291,127 @@ void MainWindow::on_exporter_clicked()
     }
     else
         QMessageBox::critical(nullptr, QObject::tr("Not OK"), QObject::tr("pdf non effectué.\nClick Cancel to exit."), QMessageBox::Cancel);
+    qApp->setStyleSheet(R"(
+    QMessageBox {
+        background-color: white;
+    }
+    QMessageBox QLabel {
+        color: black;
+        font-size: 14px;
+    }
+    QMessageBox QPushButton {
+        background-color: #e45638;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+    }
+)");
 }
 
 
-
 void MainWindow::on_stat_clicked()
-    {
-            QChartView* chartView =tmpMatch.stat(); // Récupère le graphique
+{
+    // Créer un modèle de requête SQL avec comptage des types de match
+    QSqlQuery query;
+    int totalamical = 0, totalchampionnat = 0 , totalcoupe = 0;
 
-            // Vérifie si un layout existe déjà dans statContainer
-            if (chartView) {
-                // Créer une boîte de dialogue pour afficher le graphique
-                QDialog* statsDialog = new QDialog(this);
-                statsDialog->setWindowTitle("Statistiques des clients");
-                statsDialog->resize(600, 400);
+    // Exécuter la requête SQL
+    if (query.exec("SELECT TYPE_M, COUNT(*) FROM MATCH GROUP BY TYPE_M")) {
+        while (query.next()) {
+            QString type_m = query.value(0).toString().trimmed().toLower();
+            int count = query.value(1).toInt();
 
-                QVBoxLayout* layout = new QVBoxLayout(statsDialog);
-                layout->addWidget(chartView);
-                statsDialog->setLayout(layout);
+            qDebug() << "TYPE_M reçu de la base :" << type_m << " - Count :" << count;
 
-                statsDialog->exec();
+            if (type_m == "amical") {
+                totalamical = count;
+            } else if (type_m == "championnat") {
+                totalchampionnat = count;
+            } else if (type_m == "coupe") {
+                totalcoupe = count;
             }
+        }
+
+        qDebug() << "Totaux:";
+        qDebug() << "Amical:" << totalamical;
+        qDebug() << "Championnat:" << totalchampionnat;
+        qDebug() << "Coupe:" << totalcoupe;
+    } else {
+        qDebug() << "Erreur SQL:" << query.lastError().text();
+        return;
     }
+
+
+    // Vérifier que des données ont été récupérées
+    if (totalamical == 0 && totalchampionnat == 0 && totalcoupe == 0) {
+        qDebug() << "Aucune donnée à afficher.";
+        return;
+    }
+
+    // Calculer la somme totale des matchs
+    int totalMatches = totalamical + totalchampionnat + totalcoupe;
+
+    // Créer un Pie Chart
+    QPieSeries *series = new QPieSeries();
+
+    // Ajouter des tranches avec les données
+    QPieSlice *sliceAmical = series->append("Amical", totalamical);
+    QPieSlice *sliceChampionnat = series->append("Championnat", totalchampionnat);
+    QPieSlice *sliceCoupe = series->append("Coupe", totalcoupe);
+
+    // Personnalisation des couleurs
+    sliceAmical->setBrush(QColor(0, 0, 255));  // Bleu pour Amical
+    sliceChampionnat->setBrush(QColor(255, 105, 180)); // Rose pour Championnat
+    sliceCoupe->setBrush(QColor(34, 139, 34));  // Vert pour Coupe
+
+    // Ajouter les labels avec les pourcentages en tenant compte du total
+    sliceAmical->setLabel(QString("%1: %2 (%3%)")
+                              .arg("Amical")
+                              .arg(totalamical)
+                              .arg(100.0 * totalamical / totalMatches, 0, 'f', 1));
+
+    sliceChampionnat->setLabel(QString("%1: %2 (%3%)")
+                                   .arg("Championnat")
+                                   .arg(totalchampionnat)
+                                   .arg(100.0 * totalchampionnat / totalMatches, 0, 'f', 1));
+
+    sliceCoupe->setLabel(QString("%1: %2 (%3%)")
+                             .arg("Coupe")
+                             .arg(totalcoupe)
+                             .arg(100.0 * totalcoupe / totalMatches, 0, 'f', 1));
+
+    // Exploser les tranches pour les mettre en avant
+    sliceAmical->setExploded(true);
+    sliceChampionnat->setExploded(true);
+    sliceCoupe->setExploded(true);
+
+    // Rendre les labels visibles
+    sliceAmical->setLabelVisible(true);
+    sliceChampionnat->setLabelVisible(true);
+    sliceCoupe->setLabelVisible(true);
+
+    // Créer un graphique
+    QChart *chart = new QChart();
+    chart->addSeries(series);
+    chart->setTitle("Répartition des types de matchs");
+    chart->setAnimationOptions(QChart::SeriesAnimations);
+
+    // Ajouter une légende et l'aligner en bas
+    chart->legend()->setAlignment(Qt::AlignBottom);
+
+    // Créer un QChartView pour afficher le graphique
+    QChartView *chartView = new QChartView(chart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+    chartView->setMinimumSize(400, 300);
+
+    // Créer une scène et ajouter le QChartView
+    QGraphicsScene *scene = new QGraphicsScene();
+    scene->addWidget(chartView);
+
+    // Associer la scène à QGraphicsView
+    ui->graphicsView->setScene(scene);
+}
+
 
 
 
@@ -263,97 +420,81 @@ void MainWindow::on_stat_clicked()
 
     void MainWindow::on_tri_clicked()
     {
-        QString critere = ui->par->currentText().toLower(); // récupère le critère sélectionné (date, equipe, stade)
-        QSqlQueryModel* sortedModel = tmpMatch.trier(critere);
+
+        QString critere = ui->par->currentText().toLower(); // Ex: "date", "equipe", "stade"
+        bool desc = ui->checkDescendant->isChecked();       // Vérifie si l'utilisateur veut un tri descendant
+
+        // Appelle la méthode de tri avec le critère et l'ordre
+        QSqlQueryModel* sortedModel = tmpMatch.trier(critere, desc);
 
         if (sortedModel) {
             ui->tableView->setModel(sortedModel);
-            QString message = "Tri effectué par " + critere + ".";
-            QMessageBox::information(nullptr, QObject::tr("OK"), message, QMessageBox::Cancel);
-        } else {
-            QMessageBox::critical(nullptr, QObject::tr("Erreur"), QObject::tr("Échec du tri."), QMessageBox::Cancel);
-        }
 
+            QString ordre = desc ? "décroissant" : "croissant";
+            QString message = "Tri effectué par " + critere + " (" + ordre + ").";
+            QMessageBox::information(this, tr("Tri"), message);
+        } else {
+            QMessageBox::critical(this, tr("Erreur"), tr("Échec du tri."));
+        }
     }
+
 
     void MainWindow::genererCalendrier(const QList<Match>& matchs, QDate mois)
     {
         qDebug() << "Génération du calendrier pour :" << mois.toString("MMMM yyyy");
-        qDebug() << "Nombre de matchs :" << matchs.size();
+        qDebug() << "Nombre de matchs à afficher :" << matchs.size();
 
-        // Définir les en-têtes
-        ui->calendarTable->clear();
-        ui->calendarTable->setColumnCount(7);
-        ui->calendarTable->setHorizontalHeaderLabels({"Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"});
-
-        QDate premierJour(mois.year(), mois.month(), 1);
-        int jourSemaine = premierJour.dayOfWeek(); // 1 (lundi) à 7 (dimanche)
-        int joursDansMois = mois.daysInMonth();
-        int lignes = qCeil((jourSemaine - 1 + joursDansMois) / 7.0);
-        ui->calendarTable->setRowCount(lignes);
-
-        // Création initiale des cellules avec numéro du jour
-        for (int jour = 1; jour <= joursDansMois; ++jour) {
-            QDate date = QDate(mois.year(), mois.month(), jour);
-            int index = (jourSemaine - 2) + (jour - 1);
-            int row = index / 7;
-            int col = index % 7;
-
-            QTableWidgetItem* item = new QTableWidgetItem(QString::number(jour));
-            item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-            ui->calendarTable->setItem(row, col, item);
-
-        }
-
-        // Ajout des matchs
+        // Définir la date du calendrier
+        ui->calendarTable->setSelectedDate(mois);
+        
+        // Stocker les matchs dans une map pour un accès rapide
+        QMap<QDate, QList<Match>> matchsParDate;
         for (const Match& m : matchs) {
             QDate dateMatch = m.getDate();
-
-            if (dateMatch.month() != mois.month() || dateMatch.year() != mois.year())
-                continue;
-
-            int jour = dateMatch.day();
-            int index = (jourSemaine - 2) + (jour - 1);
-            int row = index / 7;
-            int col = index % 7;
-
-            QTableWidgetItem* item = ui->calendarTable->item(row, col);
-            if (!item) {
-                item = new QTableWidgetItem(QString::number(jour));
-                item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-                ui->calendarTable->setItem(row, col, item);
+            if (dateMatch.month() == mois.month() && dateMatch.year() == mois.year()) {
+                matchsParDate[dateMatch].append(m);
             }
-
-            QString text = item->text();
-            text += "\n - " + m.getEquipe1() + " vs " + m.getEquipe2();
-
-            item->setText(text);
-            item->setBackground(QColor("#2E86C1"));  // bleu léger
-            item->setForeground(QColor("white"));    // texte blanc
-
         }
 
-        // Mise à jour de la taille
-        ui->calendarTable->resizeColumnsToContents();
-        ui->calendarTable->resizeRowsToContents();
-    }
+        // Connecter le signal de sélection de date
+        connect(ui->calendarTable, &QCalendarWidget::clicked, this, [this, matchsParDate](const QDate& date) {
+            QString matchDetails;
+            bool hasMatches = false;
 
+            if (matchsParDate.contains(date)) {
+                hasMatches = true;
+                for (const Match& m : matchsParDate[date]) {
+                    matchDetails += QString("Match: %1 vs %2\n").arg(m.getEquipe1(), m.getEquipe2());
+                    matchDetails += QString("Lieu: %1\n").arg(m.getLieu());
+                    matchDetails += QString("Type: %1\n").arg(m.getType());
+                    matchDetails += QString("Etat: %1\n\n").arg(m.getEtat());
+                }
+            }
+
+            if (!hasMatches) {
+                matchDetails = "Aucun match prévu pour cette date.";
+            }
+
+            ui->txt_match_details->setText(matchDetails);
+        });
+    }
 
     void MainWindow::on_calendarButton_clicked()
     {
-        QDate moisActuel = QDate::currentDate();
-        QList<Match> liste = Match::getAllMatches(); // ta fonction métier
-        genererCalendrier(liste, moisActuel);
 
+        ui->stackedWidget->setCurrentIndex(7);
+        QDate moisActuel = QDate::currentDate();
+        QList<Match> liste = Match::getAllMatches();
+        genererCalendrier(liste, moisActuel);
+        updateMoisLabel();
     }
 
     void MainWindow::updateMoisLabel()
     {
         QString moisAnnee = moisAffiche.toString("MMMM yyyy");
-        moisAnnee[0] = moisAnnee[0].toUpper(); // capitaliser la première lettre
+        moisAnnee[0] = moisAnnee[0].toUpper();
         ui->lblMoisAnnee->setText(moisAnnee);
     }
-
 
     void MainWindow::on_btnMoisSuivant_clicked()
     {
@@ -383,7 +524,87 @@ void MainWindow::on_stat_clicked()
         updateMoisLabel();
     }
 
+    void MainWindow::on_btnAujourdhui_clicked()
+    {
+        moisAffiche = QDate::currentDate();
+        genererCalendrier(Match::getAllMatches(), moisAffiche);
+        updateMoisLabel();
+    }
+   /*
+        void MainWindow::on_btnAujourdhui_clicked()
+    {
+        moisAffiche = QDate::currentDate();
+        genererCalendrier(Match::getAllMatches(), moisAffiche);
+        updateMoisLabel();
+    }*/
+
+
+    /*void MainWindow::on_btnAfficherQR_clicked()
+    {
+        QModelIndex index = ui->tableView->currentIndex();
+        if (!index.isValid()) return;
+
+        int row = index.row();
+        QString eq1 = ui->tableView->model()->index(row, 1).data().toString();
+        QString eq2 = ui->tableView->model()->index(row, 2).data().toString();
+        QDate date = ui->tableView->model()->index(row, 3).data().toDate();
+        QString lieu = ui->tableView->model()->index(row, 4).data().toString();
+        QString type = ui->tableView->model()->index(row, 5).data().toString();
+
+        Match m(eq1, eq2, date, lieu, type, "prévu","gfhvb","hgcvgv");
+        afficherQRCodePourMatch(m);
+    }*/
 
 
 
 
+
+
+    void MainWindow::on_sms_clicked()
+    {
+        QString num ="+21697347595";
+        QString txt = "uhjbuvb";
+        tmpMatch.sendSMS(num,txt);
+
+    }
+
+
+    void MainWindow::on_micropush_clicked()
+    {
+        QProcess *process = new QProcess(this);
+
+        // Chemin vers le script Python
+        QString scriptPath = "C:/Users/MSI/Downloads/projet/reco_vocale.py";
+
+        // Chemin vers l'exécutable Python
+        QString pythonPath = "C:/Users/MSI/AppData/Local/Programs/Python/Python310/python.exe";
+
+        // Lancer le script
+        process->start(pythonPath, QStringList() << scriptPath);
+
+        // Attente de fin du script
+        if (!process->waitForFinished(8000)) {
+            qDebug() << "Erreur lors de l'exécution du script : " << process->errorString();
+            return;
+        }
+
+        // Lire la sortie du script
+        QString output = process->readAllStandardOutput().trimmed();
+        qDebug() << "Texte brut reçu : [" << output << "]";
+
+        // Nettoyage du texte
+        output.remove("Parlez...");
+        output.remove("\r");
+        output.remove("\n");
+        output = output.trimmed();
+
+        qDebug() << "Texte nettoyé : [" << output << "]";
+
+        // Afficher le texte dans le QLineEdit
+        ui->micro->setText(output);
+
+        // Appeler la fonction de recherche avec le texte
+        on_recherche_button_clicked(output);
+
+
+    }
