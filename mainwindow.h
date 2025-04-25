@@ -15,6 +15,7 @@
 #include "Employes.h"
 #include "Smtp.h"     // Pour l'envoi de mail
 #include "dialog__qr.h"
+#include <QSerialPort>  // For serial communication
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -47,11 +48,15 @@ private slots:
     void onTableItemClicked(QTableWidgetItem *item);
     void loadAllEmployees();
     void on_pushButton_Refresh_clicked();
+    void on_RFIDTEST_clicked();
+    void testRFIDSimulation(const QString &inputID);
 
 private:
     int editingRow = -1;
     Ui::MainWindow *ui;
     Employes employe; // Ajout de l'instance utilisée pour récupérer les emails
+    QSerialPort serial;
+    void sendArduinoCommand(const QString &command);
 };
 
 #endif // MAINWINDOW_H

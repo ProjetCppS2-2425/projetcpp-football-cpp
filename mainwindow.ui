@@ -1402,6 +1402,78 @@ QPushButton::hover {
          <string>refresh</string>
         </property>
        </widget>
+       <widget class="QLineEdit" name="RFID">
+        <property name="geometry">
+         <rect>
+          <x>590</x>
+          <y>380</y>
+          <width>51</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="RFIDTEST">
+        <property name="geometry">
+         <rect>
+          <x>490</x>
+          <y>380</y>
+          <width>91</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+    background-color: #E45638;
+    color: white;
+    border: 2px solid #E45638;
+    border-radius: 4px;               /* Smaller rounded corners */
+    padding: 4px 8px;                 /* Minimal padding */
+    font-size: 11px;                  /* Smaller font size */
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.15s ease-in-out; /* Faster transition */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+QPushButton:hover {
+    background-color: #D14829;
+    border: 2px solid #D14829;
+    transform: scale(1.03);          /* Very slight scaling */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    filter: brightness(1.05);
+}
+
+QPushButton:pressed {
+    background-color: #B23A24;
+    border: 2px solid #B23A24;
+    transform: scale(0.95);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+QPushButton:disabled {
+    background-color: #e0e0e0;
+    color: #b0b0b0;
+    border: 2px solid #e0e0e0;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+QPushButton::icon {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+</string>
+        </property>
+        <property name="text">
+         <string>RFID TEST</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">

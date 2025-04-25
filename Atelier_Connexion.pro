@@ -30,6 +30,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    arduinoserial.cpp \
     dialog__qr.cpp \
     employes.cpp \
         main.cpp \
@@ -39,6 +40,7 @@ SOURCES += \
     smtp.cpp
 
 HEADERS += \
+    arduinoserial.h \
     dialog__qr.h \
     employes.h \
         mainwindow.h \

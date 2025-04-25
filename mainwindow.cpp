@@ -12,6 +12,10 @@
 #include <QTextTable>
 #include <QTextCursor>
 #include <QDir>
+#include "arduinoserial.h"
+#include <QtSql>
+#include <QDebug>
+
 
 void logMessage(const QString& message) {
     QFile file("debug_log.txt");
@@ -23,13 +27,14 @@ void logMessage(const QString& message) {
     }
 }
 
+ArduinoSerial arduino;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , employe("DefaultNom", "DefaultPrenom", "2025-04-11", "3000", "PosteDefaut", "email@example.com", "Homme", "password123", 1, 2)
 {
     ui->setupUi(this);
-
     // Initialize database connection
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     QString dbPath = QDir::toNativeSeparators("D:/ProBracket II/probracket.db");
@@ -147,6 +152,11 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    // Clean up if necessary
+    if (serial.isOpen()) {
+        serial.close();  // Make sure to close the serial port
+    }
+
     delete ui;
 }
 
@@ -830,4 +840,28 @@ void MainWindow::on_pushButton_Refresh_clicked()
         logMessage("No employees found in database during refresh");
         QMessageBox::information(this, "Information", "No employees found in database");
     }
+}
+
+void MainWindow::testRFIDSimulation(const QString &inputID) {
+    qDebug() << "🚨 Checking ID: " << inputID;  // Debug message
+
+    // Connect to database and check if the ID exists
+    QSqlQuery query;
+    query.prepare("SELECT * FROM EMPLOYES WHERE ID_EMP = :id");
+    query.bindValue(":id", inputID);
+
+    if (query.exec() && query.next()) {
+        qDebug() << "🚨 ID matched in the database, sending OK to Arduino!";
+        arduino.sendCommand("OK");  // Send "OK" to Arduino
+        // Optional: Trigger buzzer to buzz once for success
+    } else {
+        qDebug() << "🚨 ID not found in the database, sending ERROR to Arduino!";
+        arduino.sendCommand("ERROR");  // Send "ERROR" to Arduino
+        // Optional: Trigger buzzer to buzz twice for failure
+    }
+}
+
+void MainWindow::on_RFIDTEST_clicked() {
+    QString inputID = ui->RFID->text();  // Get ID from lineEdit
+    testRFIDSimulation(inputID);  // Call test method with input ID
 }
