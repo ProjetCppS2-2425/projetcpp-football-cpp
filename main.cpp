@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
     MainWindow w;
 
     //w.show();
+    //nouh meznd
 
     Connection c;
 
