@@ -3,6 +3,7 @@
 #include <QPainter>
 #include <QPdfWriter>
 #include <QSqlError>
+<<<<<<< HEAD
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -10,6 +11,9 @@
 #include <QUrlQuery>
 #include <QJsonDocument>
 #include <QJsonObject>
+=======
+
+>>>>>>> 3cc7da6101729ac1972ed9727dd55abc24485e81
 Match::Match()
 {
 }
@@ -98,14 +102,15 @@ bool Match::modifier(int id_m, QString equipe1, QString equipe2, QDate date,
     query.bindValue(":lieu", lieu);
     query.bindValue(":type", type);
     query.bindValue(":etat", etat);
+<<<<<<< HEAD
 
 
    /* bool success = query.exec();
     if (success) {
         this->num_equipe1 = num1;
         this->num_equipe2 = num2;  // Envoyer SMS après modification réussie
-    }
-    return success;*/
+=======
+    return query.exec();
 }
 QSqlQueryModel* Match::chercherAvance(const QString& id, const QString& lieu, const QString& equipe1)
 {
@@ -147,8 +152,55 @@ QSqlQueryModel* Match::chercherAvance(const QString& id, const QString& lieu, co
         qDebug() << "Erreur SQL : " << query.lastError().text();
         delete model;
         return nullptr;
+>>>>>>> 3cc7da6101729ac1972ed9727dd55abc24485e81
+    }
+    return success;*/
+}
+QSqlQueryModel* Match::chercherAvance(const QString& id, const QString& lieu, const QString& equipe1)
+{
+    QSqlQueryModel* model = new QSqlQueryModel();
+    QSqlQuery query;
+
+<<<<<<< HEAD
+    QString queryString = "SELECT * FROM MATCH WHERE 1=1"; // permet d'ajouter des conditions facilement
+
+    if (!id.isEmpty())
+        queryString += " AND ID_M = :id";
+    if (!lieu.isEmpty())
+        queryString += " AND LIEU LIKE :lieu";
+    if (!equipe1.isEmpty())
+        queryString += " AND EQUIPE1 LIKE :equipe1";
+
+    query.prepare(queryString);
+
+    if (!id.isEmpty())
+        query.bindValue(":id", id.toInt());
+    if (!lieu.isEmpty())
+        query.bindValue(":lieu", "%" + lieu + "%");
+    if (!equipe1.isEmpty())
+        query.bindValue(":equipe1", "%" + equipe1 + "%");
+
+    if (query.exec()) {
+        model->setQuery(std::move(query));
+
+        model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID_M"));
+        model->setHeaderData(1, Qt::Horizontal, QObject::tr("EQUIPE1"));
+        model->setHeaderData(2, Qt::Horizontal, QObject::tr("EQUIPE2"));
+        model->setHeaderData(3, Qt::Horizontal, QObject::tr("DATE_M"));
+        model->setHeaderData(4, Qt::Horizontal, QObject::tr("LIEU"));
+        model->setHeaderData(5, Qt::Horizontal, QObject::tr("TYPE_M"));
+        model->setHeaderData(6, Qt::Horizontal, QObject::tr("EQ1_BUT"));
+        model->setHeaderData(7, Qt::Horizontal, QObject::tr("EQ2_BUT"));
+        model->setHeaderData(8, Qt::Horizontal, QObject::tr("ETAT"));
+        model->setHeaderData(9, Qt::Horizontal, QObject::tr("ID_E"));
+    } else {
+        qDebug() << "Erreur SQL : " << query.lastError().text();
+        delete model;
+        return nullptr;
     }
 
+=======
+>>>>>>> 3cc7da6101729ac1972ed9727dd55abc24485e81
     return model;
 }
 
