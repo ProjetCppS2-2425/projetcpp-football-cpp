@@ -42,10 +42,13 @@ MainWindow::MainWindow(QWidget *parent)
     genererCalendrier(Match::getAllMatches(), moisAffiche);
     updateMoisLabel(); // <-- très important
   //  connect(ui->checkDescendant, &QCheckBox::stateChanged, this, &MainWindow::on_tri_clicked);
+<<<<<<< HEAD
     ui->btnMoisSuivant->setCursor(Qt::PointingHandCursor);
     ui->btnMoisPrecedent->setCursor(Qt::PointingHandCursor);
     ui->btnAnneeSuivante->setCursor(Qt::PointingHandCursor);
     ui->btnAnneePrecedente->setCursor(Qt::PointingHandCursor);
+=======
+>>>>>>> 3cc7da6101729ac1972ed9727dd55abc24485e81
 
 }
 
@@ -444,6 +447,7 @@ void MainWindow::on_stat_clicked()
         qDebug() << "Génération du calendrier pour :" << mois.toString("MMMM yyyy");
         qDebug() << "Nombre de matchs à afficher :" << matchs.size();
 
+<<<<<<< HEAD
         // Définir la date du calendrier
         ui->calendarTable->setSelectedDate(mois);
         
@@ -477,12 +481,102 @@ void MainWindow::on_stat_clicked()
 
             ui->txt_match_details->setText(matchDetails);
         });
+=======
+        // Définir les en-têtes
+        ui->calendarTable->clear();
+        ui->calendarTable->setColumnCount(7);
+        ui->calendarTable->setHorizontalHeaderLabels({"Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"});
+
+        QDate premierJour(mois.year(), mois.month(), 1);
+        int jourSemaine = premierJour.dayOfWeek(); // 1 (lundi) à 7 (dimanche)
+        int joursDansMois = mois.daysInMonth();
+        int lignes = qCeil((jourSemaine - 1 + joursDansMois) / 7.0);
+        ui->calendarTable->setRowCount(lignes);
+
+        // Création initiale des cellules avec numéro du jour
+        for (int jour = 1; jour <= joursDansMois; ++jour) {
+            QDate date = QDate(mois.year(), mois.month(), jour);
+            int index = (jourSemaine - 2) + (jour - 1);
+            int row = index / 7;
+            int col = index % 7;
+
+            QTableWidgetItem* item = new QTableWidgetItem(QString::number(jour));
+            item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+            item->setData(Qt::UserRole, date); // Store the date as user data
+            ui->calendarTable->setItem(row, col, item);
+        }
+
+        // Ajout des matchs
+        for (const Match& m : matchs) {
+            QDate dateMatch = m.getDate();
+
+            if (dateMatch.month() != mois.month() || dateMatch.year() != mois.year())
+                continue;
+
+            int jour = dateMatch.day();
+            int index = (jourSemaine - 2) + (jour - 1);
+            int row = index / 7;
+            int col = index % 7;
+
+            QTableWidgetItem* item = ui->calendarTable->item(row, col);
+            if (!item) {
+                item = new QTableWidgetItem(QString::number(jour));
+                item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+                item->setData(Qt::UserRole, dateMatch);
+                ui->calendarTable->setItem(row, col, item);
+            }
+
+            QString text = item->text();
+            text += "\n - " + m.getEquipe1() + " vs " + m.getEquipe2();
+
+            item->setText(text);
+            item->setBackground(QColor("#2E86C1"));  // bleu léger
+            item->setForeground(QColor("white"));    // texte blanc
+        }
+
+        // Mise à jour de la taille
+        ui->calendarTable->resizeColumnsToContents();
+        ui->calendarTable->resizeRowsToContents();
+
+        // Connecter le signal de sélection
+        connect(ui->calendarTable, &QTableWidget::itemClicked, this, &MainWindow::onCalendarItemClicked);
+    }
+
+    void MainWindow::onCalendarItemClicked(QTableWidgetItem* item)
+    {
+        if (!item) return;
+
+        QDate selectedDate = item->data(Qt::UserRole).toDate();
+        QList<Match> matches = Match::getAllMatches();
+        QString matchDetails;
+
+        for (const Match& m : matches) {
+            if (m.getDate() == selectedDate) {
+                matchDetails += QString("Match: %1 vs %2\n")
+                                  .arg(m.getEquipe1())
+                                  .arg(m.getEquipe2());
+                matchDetails += QString("Lieu: %1\n").arg(m.getLieu());
+                matchDetails += QString("Type: %1\n").arg(m.getType());
+                matchDetails += QString("Etat: %1\n\n").arg(m.getEtat());
+            }
+        }
+
+        if (matchDetails.isEmpty()) {
+            matchDetails = "Aucun match prévu pour cette date.";
+        }
+
+        ui->txt_match_details->setText(matchDetails);
+>>>>>>> 3cc7da6101729ac1972ed9727dd55abc24485e81
     }
 
     void MainWindow::on_calendarButton_clicked()
     {
+<<<<<<< HEAD
 
         ui->stackedWidget->setCurrentIndex(7);
+=======
+        ui->stackedWidget->setCurrentIndex(7); // Switch to calendar page
+>>>>>>> 3cc7da6101729ac1972ed9727dd55abc24485e81
         QDate moisActuel = QDate::currentDate();
         QList<Match> liste = Match::getAllMatches();
         genererCalendrier(liste, moisActuel);
@@ -556,19 +650,6 @@ void MainWindow::on_stat_clicked()
     }*/
 
 
-
-
-
-
-    void MainWindow::on_sms_clicked()
-    {
-        QString num ="+21697347595";
-        QString txt = "uhjbuvb";
-        tmpMatch.sendSMS(num,txt);
-
-    }
-
-
     void MainWindow::on_micropush_clicked()
     {
         QProcess *process = new QProcess(this);
@@ -608,3 +689,6 @@ void MainWindow::on_stat_clicked()
 
 
     }
+
+
+
