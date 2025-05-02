@@ -8,39 +8,42 @@
 class Equipes
 {
 private:
-    int Id_Eq;
-    QString Nom_Equipe;
-    QString Nationalité;
-    QString Email;
-    double Nombre_De_Joueur;
-    QString Rank;
+    int ID_EQ;
+    QString NOM_EQUIPE;
+    QString NATIONALITE;
+    QString EMAIL;
+    double NOMBRE_DE_JOUEUR;
+    QString RANK;
 
 public:
     // Constructeurs
     Equipes();
-    Equipes(int id, const QString &nom, const QString &nationalité, const QString &email, double nombre, const QString &rank);
+    Equipes(int Id_EQ, const QString &NOM_EQUIPE, const QString &NATIONALITE, const QString &EMAIL, double NOMBRE_DE_JOUEUR, const QString &RANK);
 
     // Getters
-    int getId_Eq() const;
-    QString getNom_Equipe() const;
-    QString getNationalité() const;
-    QString getEmail() const;
-    double getNombre_De_Joueur() const;
-    QString getRank() const;
+    int getID_EQ() const;
+    QString getNOM_EQUIPE() const;
+    QString getNATIONALITE() const;
+    QString getEMAIL() const;
+    double getNOMBRE_DE_JOUEUR() const;
+    QString getRANK() const;
 
     // Setters
-    void setId_Eq(int id);
-    void setNom_Equipe(const QString &nom);
-    void setNationalité(const QString &nationalité);
-    void setEmail(const QString &email);
-    void settNombre_De_Joueur(double nombre);
-    void setRank(const QString &rank);
+    void setId_EQ(int ID_EQ);
+    void setNOM_EQUIPE(const QString &NOM_EQUIPE);
+    void setNATIONALITE(const QString &NATIONALITE);
+    void setEMAIL(const QString &EMAIL);
+    void setNOMBRE_DE_JOUEUR(double NOMBRE_DE_JOUEUR);
+    void setRANK(const QString &RANK);
 
     // Fonctionnalités de base
     bool ajouter();
-    bool modifier(int id);
-    bool supprimer(int id);
+    bool modifier(int ID_EQ);
+    bool supprimer(int ID_EQ);
     QSqlQueryModel* afficher();
+    QSqlQueryModel* rechercher(const QString& critere);
+    QSqlQueryModel* trier(const QString& critere, Qt::SortOrder order = Qt::AscendingOrder);
+
 };
 
 

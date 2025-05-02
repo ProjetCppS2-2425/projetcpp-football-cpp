@@ -5,47 +5,47 @@
 // Constructeur
 Equipes::Equipes() {}
 
-Equipes::Equipes(int id, const QString &nom, const QString &nationalité, const QString &email, double nombre, const QString &rank)
-    : Id_Eq(id), Nom_Equipe(nom), Nationalité(nationalité), Email(email), Nombre_De_Joueur(nombre), Rank(rank) {}
+Equipes::Equipes(int ID_EQ, const QString &NOM_EQUIPE, const QString &NATIONALITE, const QString &EMAIL, double NOMBRE_DE_JOUEUR, const QString &RANK)
+    : ID_EQ(ID_EQ), NOM_EQUIPE(NOM_EQUIPE), NATIONALITE(NATIONALITE), EMAIL(EMAIL), NOMBRE_DE_JOUEUR(NOMBRE_DE_JOUEUR), RANK(RANK) {}
 
 // Ajouter un partenaire
 bool Equipes::ajouter()
 {
     QSqlQuery query;
-    QString eq = QString::number(Id_Eq);
-    query.prepare("INSERT INTO Equipes (ID_EQ, NOM, NATIONALITE, EMAIL, NOMBRE_DE_JOUEURS,RANK) "
-                  "VALUES (:id, :nom, :nationalité, :email, :nombre, :rank)");
-    query.bindValue(":id", Id_Eq);
-    query.bindValue(":nom",Nom_Equipe );
-    query.bindValue(":nationalité",Nationalité);
-    query.bindValue(":email",Email);
-    query.bindValue(":nombre",Nombre_De_Joueur);
-    query.bindValue(":rank", Rank);
+    QString eq = QString::number(ID_EQ);
+    query.prepare("INSERT INTO Equipes (ID_EQ, NOM_EQUIPE, NATIONALITE, EMAIL, NOMBRE_DE_JOUEUR,RANK) "
+                  "VALUES (:ID_EQ,:NOM_EQUIPE,:NATIONALITE,:EMAIL,:NOMBRE_DE_JOUEUR,:RANK)");
+    query.bindValue(":ID_EQ",ID_EQ);
+    query.bindValue(":NOM_EQUIPE",NOM_EQUIPE );
+    query.bindValue(":NATIONALITE",NATIONALITE);
+    query.bindValue(":EMAIL",EMAIL);
+    query.bindValue(":NOMBRE_DE_JOUEUR",NOMBRE_DE_JOUEUR);
+    query.bindValue(":RANK",RANK);
 
-    return true;
+    return query.exec();
 }
 
 // Modifier un partenaire
-bool Equipes::modifier(int id)
+bool Equipes::modifier(int ID_EQ)
 {
     QSqlQuery query;
-    query.prepare("UPDATE EQUIPES SET NOM_EQUIPES= :nom, NATIONALITE = :nationalité, EMAIL = :email, "
-                  "NOMBRE_DE_JOUEURS = :nombre, RANK= :rank WHERE ID_EQ = :id");
-    query.bindValue(":id", id);
-    query.bindValue(":nom", Nom_Equipe);
-    query.bindValue(":nationalité", Nationalité);
-    query.bindValue(":email", Email);
-    query.bindValue(":nombre", Nombre_De_Joueur);
-    query.bindValue(":rank", Rank);
+    query.prepare("UPDATE EQUIPES SET NOM_EQUIPE= :NOM_EQUIPE , NATIONALITE = :NATIONALITE, EMAIL = :EMAIL, "
+                  "NOMBRE_DE_JOUEUR = :NOMBRE_DE_JOUEUR, RANK= :RANK WHERE ID_EQ = :ID_EQ");
+    query.bindValue(":ID_EQ", ID_EQ);
+    query.bindValue(":NOM_EQUIPE", NOM_EQUIPE);
+    query.bindValue(":NATIONALITE", NATIONALITE);
+    query.bindValue(":EMAIL", EMAIL);
+    query.bindValue(":NOMBRE_DE_JOUEUR", NOMBRE_DE_JOUEUR);
+    query.bindValue(":RANK", RANK);
     return query.exec();
 }
 
 // Supprimer un partenaire
-bool Equipes::supprimer(int Id_Eq)
+bool Equipes::supprimer(int ID_EQ)
 {
     QSqlQuery query;
-    query.prepare("DELETE FROM RESULTAT WHERE Id_Eq = :Id_Eq");
-    query.bindValue(":Id_Eq", Id_Eq); // Modifié: utiliser directement l'entier
+    query.prepare("DELETE FROM EQUIPES WHERE ID_EQ = :ID_EQ");
+    query.bindValue(":ID_EQ", ID_EQ); // Modifié: utiliser directement l'entier
     return query.exec();
 }
 
@@ -54,11 +54,53 @@ QSqlQueryModel* Equipes::afficher()
 {
     QSqlQueryModel *model = new QSqlQueryModel();
     model->setQuery("SELECT * FROM EQUIPES");
-    model->setHeaderData(0, Qt::Horizontal, QObject::tr("Id_Eq"));
-    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Nom_Equipe"));
-    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Nationalité"));
-    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Email"));
-    model->setHeaderData(4, Qt::Horizontal, QObject::tr("Nombre_De_Joueur"));
-    model->setHeaderData(5, Qt::Horizontal, QObject::tr("Rank"));
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID_EQ"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("NOM_EQUIPE"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("NATIONALITE"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("EMAIL"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("NOMBRE_DE_JOUEUR"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("RANK"));
+    return model;
+    }
+
+// Rechercher des partenaires
+    QSqlQueryModel* Equipes::rechercher(const QString& critere)
+    {
+        QSqlQueryModel *model = new QSqlQueryModel();
+        model->setQuery("SELECT * FROM EQUIPES WHERE "
+                        "NOM_EQUIPE LIKE '%" + critere + "%' OR "
+                                    "NATIONALITE LIKE '%" + critere + "%' OR "
+                                    "EMAIL LIKE '%" + critere + "%' OR "
+                                    "RANK LIKE '%" + critere + "%'");
+
+        model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID_EQ"));
+        model->setHeaderData(1, Qt::Horizontal, QObject::tr("NOM_EQUIPE"));
+        model->setHeaderData(2, Qt::Horizontal, QObject::tr("NATIONALITE"));
+        model->setHeaderData(3, Qt::Horizontal, QObject::tr("EMAIL"));
+        model->setHeaderData(4, Qt::Horizontal, QObject::tr("NOMBRE_DE_JOUEUR"));
+        model->setHeaderData(5, Qt::Horizontal, QObject::tr("RANK"));
+
+        return model;
+    }
+
+QSqlQueryModel* Equipes::trier(const QString& critere, Qt::SortOrder order)
+{
+    QString orderDirection = (order == Qt::AscendingOrder) ? "ASC" : "DESC";
+
+    qDebug() << "][EQUIPES::trier] Sorting EQUIPES by:" << critere
+             << "in order:" << orderDirection;
+
+    QSqlQueryModel *model = new QSqlQueryModel();
+    model->setQuery("SELECT * FROM EQUIPES ORDER BY " + critere + " " + orderDirection);
+
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID_EQ"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("NOM_EQUIPE"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("NATIONALITE"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("EMAIL"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("NOMBRE_DE_JOUEUR"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("RANK"));
+
+    qDebug() << "][EQUIPES::trier] Sorted" << model->rowCount() << "EQUIPES";
+
     return model;
 }

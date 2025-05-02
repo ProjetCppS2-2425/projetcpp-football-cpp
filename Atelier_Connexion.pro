@@ -4,7 +4,13 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql
+QT       += core gui sql printsupport
+CONFIG += qt
+QT += charts
+QT += serialport sql
+QT += network
+
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,12 +32,14 @@ CONFIG += c++11
 
 SOURCES += \
     Equipes.cpp \
+    arduino.cpp \
         main.cpp \
         mainwindow.cpp \
     connection.cpp
 
 HEADERS += \
     Equipes.h \
+    arduino.h \
         mainwindow.h \
     connection.h
 
