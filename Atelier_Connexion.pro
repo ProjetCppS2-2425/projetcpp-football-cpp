@@ -1,19 +1,22 @@
 QT       += core gui sql
 QT +=charts
 QT += network
-QT += core network
+QT += serialport
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
 
 SOURCES += \
+    arduino.cpp \
     main.cpp \
     mainwindow.cpp \
     connection.cpp \
     match.cpp \
 
 HEADERS += \
+    arduino.h \
     mainwindow.h \
     connection.h \
     match.h \

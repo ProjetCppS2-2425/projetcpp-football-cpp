@@ -1454,7 +1454,7 @@ QGroupBox::title {
          </property>
          <property name="dateTime">
           <datetime>
-           <hour>8</hour>
+           <hour>6</hour>
            <minute>0</minute>
            <second>0</second>
            <year>2024</year>
@@ -2640,73 +2640,6 @@ QPushButton::hover {
         </property>
         <property name="text">
          <string/>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="sms">
-        <property name="geometry">
-         <rect>
-          <x>580</x>
-          <y>290</y>
-          <width>131</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton {
-    background-color: #E45638;        /* Button background color */
-    color: white;                     /* Text color */
-    border: 2px solid #E45638;        /* Border color */
-    border-radius: 10px;              /* Rounded corners */
-    padding: 12px 24px;               /* Padding for the button */
-    font-size: 14px;                  /* Smaller font size */
-    font-weight: bold;                /* Font weight */
-    text-align: center;               /* Text alignment */
-    transition: all 0.3s ease-in-out;  /* Smooth transition for all properties */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  /* Initial shadow */
-}
-
-QPushButton:hover {
-    background-color: #D14829;        /* Background color when hovered */
-    border: 2px solid #D14829;        /* Border color when hovered */
-    color: white;                     /* Text color when hovered */
-    cursor: pointer;                 /* Cursor becomes pointer */
-    transform: scale(1.1);            /* Slightly scale the button */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Increase shadow on hover */
-    filter: brightness(1.2);          /* Brighten the button */
-}
-
-QPushButton:pressed {
-    background-color: #B23A24;        /* Background color when pressed */
-    border: 2px solid #B23A24;        /* Border color when pressed */
-    color: white;                     /* Text color when pressed */
-    transform: scale(0.95);           /* Slight shrinking effect */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);  /* Decrease shadow on press */
-}
-
-QPushButton:disabled {
-    background-color: #e0e0e0;        /* Background color when disabled */
-    color: #b0b0b0;                   /* Text color when disabled */
-    border: 2px solid #e0e0e0;        /* Border color when disabled */
-    cursor: not-allowed;              /* Cursor when disabled */
-    box-shadow: none;                 /* No shadow when disabled */
-}
-
-QPushButton::icon {
-    padding-left: 8px;                /* Icon padding */
-    padding-right: 8px;               /* Icon padding */
-}
-
-QPushButton::hover {
-    background-color: #D14829;        /* Background color on hover */
-    color: white;                     /* Text color on hover */
-    border: 2px solid #D14829;        /* Border color on hover */
-    transform: scale(1.1);            /* Scaling on hover */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);  /* Glowing effect on hover */
-}
-</string>
-        </property>
-        <property name="text">
-         <string>a suivant</string>
         </property>
        </widget>
        <widget class="QCalendarWidget" name="calendarTable">

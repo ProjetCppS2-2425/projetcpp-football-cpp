@@ -10,6 +10,8 @@
 #include <QPushButton>
 #include <QPixmap>
 #include <QImage>
+#include "arduino.h"
+
 
 
 
@@ -36,7 +38,7 @@ private slots:
     void on_ajouterMatch_clicked();
 
 
-    void on_recherche_button_clicked(QString);
+    void on_recherche_button_clicked();
 
     void on_exporter_clicked();
 
@@ -44,6 +46,8 @@ private slots:
 
 
     void on_tri_clicked();
+    void setupArduino();
+    void onSerialData();
 
     void genererCalendrier(const QList<Match>& matchs, QDate mois);
 
@@ -59,14 +63,18 @@ private slots:
 
     void on_btnAujourdhui_clicked();
 
-
-
-    void on_sms_clicked();
-
     void on_micropush_clicked();
+
+    //void initSerial();
+
+    //void readSerial();
+
+    void chercherMatch(int id);
+
 
 private:
     Ui::MainWindow *ui;
+    Arduino arduino;
     Match tmpMatch;
     void refreshTable();
     void clearInputFields();

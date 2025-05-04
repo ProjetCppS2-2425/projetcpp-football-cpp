@@ -15,6 +15,10 @@
 #include <QSqlError>
 #include <QDebug>
 #include <QProcess>
+#include <QSerialPort>
+#include <QSerialPortInfo>
+
+QSerialPort *serial;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -38,7 +42,9 @@ MainWindow::MainWindow(QWidget *parent)
                                           "Click Cancel to exit."), QMessageBox::Cancel);
 
 
+
     moisAffiche = QDate::currentDate();
+    setupArduino();
     genererCalendrier(Match::getAllMatches(), moisAffiche);
     updateMoisLabel(); // <-- très important
   //  connect(ui->checkDescendant, &QCheckBox::stateChanged, this, &MainWindow::on_tri_clicked);
@@ -154,7 +160,8 @@ void MainWindow::refreshTable()
 
 void MainWindow::on_ajouterMatch_clicked()
 {
-    int id_m=tmpMatch.nextid();
+    ui->tableView->setModel(tmpMatch.afficher());
+    int id_m = tmpMatch.nextid();
     QString equipe1 = ui->lineEdit_equipe1->text();
     QString equipe2 = ui->lineEdit_equipe2->text();
     QDate date = ui->dateEdit_date->date();
@@ -162,74 +169,56 @@ void MainWindow::on_ajouterMatch_clicked()
     QString type = ui->comboBox_type->currentText();
     QString etat = ui->comboBox_etat->currentText();
 
-    Match tmpmatch(id_m, equipe1, equipe2, date, lieu, type, etat);
-
-    // Contrôle de saisie
     QString errorMessage;
 
-    if (equipe1.isEmpty() || equipe2.isEmpty()) {
+    if (equipe1.isEmpty() || equipe2.isEmpty())
         errorMessage += "Les noms des équipes ne peuvent pas être vides.\n";
-    }
 
-    if (equipe1 == equipe2) {
+    if (equipe1 == equipe2)
         errorMessage += "Les deux équipes ne peuvent pas être identiques.\n";
-    }
 
-    if (date < QDate::currentDate()) {
+    if (date < QDate::currentDate())
         errorMessage += "La date du match ne peut pas être dans le passé.\n";
-    }
 
-    if (lieu.isEmpty()) {
+    if (lieu.isEmpty())
         errorMessage += "Le lieu du match ne peut pas être vide.\n";
-    }
 
-    // Si des erreurs ont été détectées, les afficher et arrêter l'ajout
     if (!errorMessage.isEmpty()) {
-        QMessageBox::warning(this, "Erreur de saisie", errorMessage);
-        return;
-    }
-
-
-    // Si tout est correct, procéder à l'ajout
-    Match m(id_m, equipe1, equipe2, date, lieu, type, etat);
-    bool success = m.ajouter();
-
-    if(success) {
         QMessageBox msgBox;
         msgBox.setStyleSheet("QLabel { color: white; } "
                              "QMessageBox { background-color: #2c2c2c; } "
                              "QPushButton { background-color: #e45638; color: white; border-radius: 5px; padding: 5px; }");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setWindowTitle("Erreur de saisie");
+        msgBox.setText(errorMessage);
+        msgBox.exec();
+        return;
+    }
 
+    Match m(id_m, equipe1, equipe2, date, lieu, type, etat);
+    bool success = m.ajouter();
+
+    QMessageBox msgBox;
+    msgBox.setStyleSheet("QLabel { color: white; } "
+                         "QMessageBox { background-color: #2c2c2c; } "
+                         "QPushButton { background-color: #e45638; color: white; border-radius: 5px; padding: 5px; }");
+
+    if (success) {
         msgBox.setIcon(QMessageBox::Information);
         msgBox.setWindowTitle("Ajout");
         msgBox.setText("Ajout effectué avec succès !");
-        msgBox.exec();
     } else {
-        QMessageBox::critical(this, "Erreur", "Une erreur est survenue lors de l'ajout du match.");
-
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.setWindowTitle("Erreur");
+        msgBox.setText("Une erreur est survenue lors de l'ajout du match.");
     }
-    qApp->setStyleSheet(R"(
-    QMessageBox {
-        background-color: white;
-    }
-    QMessageBox QLabel {
-        color: black;
-        font-size: 14px;
-    }
-    QMessageBox QPushButton {
-        background-color: #e45638;
-        color: white;
-        padding: 5px;
-        border-radius: 5px;
-    }
-)");
-
+    msgBox.exec();
 }
 
 
 
 
-void MainWindow::on_recherche_button_clicked(QString output )
+void MainWindow::on_recherche_button_clicked( )
 {
     QString id = ui->lineEdit_id_2->text();           // champ de recherche pour ID
     QString lieu = ui->lineEdit_lieu_2->text();       // champ pour le lieu
@@ -432,9 +421,18 @@ void MainWindow::on_stat_clicked()
 
             QString ordre = desc ? "décroissant" : "croissant";
             QString message = "Tri effectué par " + critere + " (" + ordre + ").";
-            QMessageBox::information(this, tr("Tri"), message);
+            QMessageBox msgBox;
+            msgBox.setStyleSheet("QLabel{ color: white; }"
+                                 "QMessageBox{ background-color: #2b2b2b; }"
+                                 "QPushButton{ background-color: #444; color: white; }");
+            msgBox.setIcon(QMessageBox::Information);
+            msgBox.setWindowTitle("Tri");
+            msgBox.setText("Tri effectué par " + critere + " (" + ordre + ").");
+            msgBox.exec();
+
         } else {
             QMessageBox::critical(this, tr("Erreur"), tr("Échec du tri."));
+
         }
     }
 
@@ -556,19 +554,6 @@ void MainWindow::on_stat_clicked()
     }*/
 
 
-
-
-
-
-    void MainWindow::on_sms_clicked()
-    {
-        QString num ="+21697347595";
-        QString txt = "uhjbuvb";
-        tmpMatch.sendSMS(num,txt);
-
-    }
-
-
     void MainWindow::on_micropush_clicked()
     {
         QProcess *process = new QProcess(this);
@@ -604,7 +589,134 @@ void MainWindow::on_stat_clicked()
         ui->micro->setText(output);
 
         // Appeler la fonction de recherche avec le texte
-        on_recherche_button_clicked(output);
+        on_recherche_button_clicked();
 
 
     }
+    void MainWindow::chercherMatch(int id)
+    {
+        QList<Match> matchs = Match::getAllMatches();
+        for (const Match& m : matchs) {
+            if (m.getId() == id) {
+                // ✅ Match trouvé, afficher les détails
+                ui->lineEdit_equipe1->setText(m.getEquipe1());
+                ui->lineEdit_equipe2->setText(m.getEquipe2());
+                ui->lineEdit_lieu->setText(m.getLieu());
+                ui->comboBox_type->setCurrentText(m.getType());
+                ui->comboBox_etat->setCurrentText(m.getEtat());
+                return;
+            }
+        }
+        // Si aucun match trouvé
+        ui->lineEdit_equipe1->setText("Non trouvé");
+        ui->lineEdit_equipe2->setText("Non trouvé");
+        ui->lineEdit_lieu->setText("-");
+        ui->comboBox_type->setCurrentText("-");
+        ui->comboBox_etat->setCurrentText("-");
+    }
+
+
+
+   /* void MainWindow::initSerial()
+    {
+        serial = new QSerialPort(this);
+
+        serial->setPortName("COM10");         // ⚡ Très important : ton Arduino est sur COM10
+        serial->setBaudRate(QSerialPort::Baud9600);
+        serial->setDataBits(QSerialPort::Data8);
+        serial->setParity(QSerialPort::NoParity);
+        serial->setStopBits(QSerialPort::OneStop);
+        serial->setFlowControl(QSerialPort::NoFlowControl);
+
+        if (serial->open(QIODevice::ReadOnly)) {
+            connect(serial, &QSerialPort::readyRead, this, &MainWindow::readSerial);
+            qDebug() << "Port série ouvert avec succès sur COM10";  // ✅ Ajoute ça
+        } else {
+            QMessageBox::critical(this, "Erreur", "Impossible d'ouvrir le port série COM10");
+        }
+    }
+
+
+    void MainWindow::readSerial()
+    {
+        QByteArray data = serial->readAll();
+        QString message = QString::fromUtf8(data).trimmed();
+
+        qDebug() << "Reçu depuis Arduino:" << message;  // ⚡ Ajoute ceci !!
+
+        if (message.startsWith("ID:")) {
+            QString idStr = message.mid(3);
+            int idMatch = idStr.toInt();
+            chercherMatch(idMatch);
+        }
+    }
+*/
+
+
+
+    void MainWindow::setupArduino() {
+        qDebug() << "Ports série disponibles :";
+        for (const QSerialPortInfo &info : QSerialPortInfo::availablePorts()) {
+            qDebug() << "  PortName:" << info.portName()
+            << "  VendorID:" << info.vendorIdentifier()
+            << "  ProductID:"<< info.productIdentifier();
+        }
+        int ret = arduino.connect_arduino();
+        if (ret != 0) {
+            QMessageBox::warning(this, "Arduino",
+                                 "Impossible de se connecter à l'Arduino");
+
+            return;
+        }
+
+
+        // Dès qu’on reçoit une trame, appeler onSerialData()
+        connect(arduino.getserial(), &QSerialPort::readyRead,
+                this, &MainWindow::onSerialData);
+
+    }
+
+    void MainWindow::onSerialData()
+    {
+        static QByteArray buffer;
+        static QStringList ids;
+
+        buffer += arduino.read_from_arduino();
+
+        while (buffer.contains('\n')) {
+            int endIndex = buffer.indexOf('\n');
+            QByteArray line = buffer.left(endIndex).trimmed();
+            buffer.remove(0, endIndex + 1);
+
+            if (!line.isEmpty()) {
+                QString id = QString::fromUtf8(line);
+                qDebug() << "ID reçu :" << id;
+
+                ids << id;
+
+                if (ids.size() == 2) {
+                    QString nom1 = "Inconnu";
+                    QString nom2 = "Inconnu";
+
+                    QSqlQuery query;
+                    query.prepare("SELECT nom_equipe FROM equipe WHERE id = :id");
+
+                    query.bindValue(":id", ids[0]);
+                    if (query.exec() && query.next())
+                        nom1 = query.value(0).toString();
+
+                    query.prepare("SELECT nom_equipe FROM equipe WHERE id = :id");
+                    query.bindValue(":id", ids[1]);
+                    if (query.exec() && query.next())
+                        nom2 = query.value(0).toString();
+
+                    QString toSend = "NAMES:" + nom1 + ":" + nom2 + "\n";
+                    qDebug() << "Envoi vers Arduino :" << toSend.trimmed();
+                    arduino.write_to_arduino(toSend.toUtf8());
+
+                    ids.clear();
+                }
+            }
+        }
+    }
+

@@ -66,8 +66,6 @@ private:
     QString etat;
     QString num_equipe1;
     QString num_equipe2;
-
-    void envoyerSMSViaService(const QString& numero, const QString& message) const;
 };
 Q_DECLARE_METATYPE(Match)
 
