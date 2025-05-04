@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "match.h"
 #include <QTableWidgetItem>
+<<<<<<< HEAD
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QLabel>
@@ -14,6 +15,8 @@
 
 
 
+=======
+>>>>>>> 3cc7da6101729ac1972ed9727dd55abc24485e81
 
 
 QT_BEGIN_NAMESPACE
@@ -30,7 +33,10 @@ public:
 
 private slots:
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3cc7da6101729ac1972ed9727dd55abc24485e81
     void on_pushButton_supprimer_clicked();
     void on_pushButton_modifier_clicked();
     void on_tableView_clicked(const QModelIndex &index);
@@ -80,6 +86,10 @@ private:
     void clearInputFields();
 
     QDate moisAffiche;
+<<<<<<< HEAD
 
+=======
+    void onCalendarItemClicked(QTableWidgetItem* item);
+>>>>>>> 3cc7da6101729ac1972ed9727dd55abc24485e81
 };
 #endif // MAINWINDOW_H

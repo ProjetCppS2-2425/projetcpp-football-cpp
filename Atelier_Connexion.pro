@@ -1,8 +1,11 @@
 QT       += core gui sql
 QT +=charts
 QT += network
+<<<<<<< HEAD
 QT += serialport
 
+=======
+>>>>>>> a4e21fbce0c95feb6184992a5470887bbc006abd
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
